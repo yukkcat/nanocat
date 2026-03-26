@@ -1,0 +1,68 @@
+{
+  "name": "nanocat-ui",
+  "private": false,
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./tailwind-preset": "./tailwind-preset.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "tailwind-preset.js",
+    "COMPONENTS.md"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && vite build && vue-tsc -p tsconfig.build.json",
+    "check": "vue-tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@iconify/vue": "^5.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.3",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4",
+    "vue-tsc": "^2.2.12",
+    "vue": "^3.5.26"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yukkcat/nanocat.git"
+  },
+  "description": "Reusable Vue 3 UI components, styles and Tailwind preset for Nanocat.",
+  "keywords": [
+    "vue",
+    "ui",
+    "components",
+    "tailwind",
+    "nanocat"
+  ],
+  "homepage": "https://github.com/yukkcat/nanocat",
+  "bugs": {
+    "url": "https://github.com/yukkcat/nanocat/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
