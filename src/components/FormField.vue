@@ -2,7 +2,7 @@
   <label class="block text-xs">
     <div class="mb-1 flex items-center gap-2">
       <span class="ui-field-label">{{ label }}</span>
-      <span v-if="required" class="text-[10px] font-semibold text-rose-500">必填</span>
+      <span v-if="required" class="text-[10px] font-semibold text-rose-500">{{ requiredText }}</span>
       <slot name="label-extra" />
     </div>
     <slot />
@@ -16,10 +16,12 @@ withDefaults(
     label: string
     hint?: string
     required?: boolean
+    requiredText?: string
   }>(),
   {
     hint: '',
     required: false,
+    requiredText: 'Required',
   }
 )
 </script>

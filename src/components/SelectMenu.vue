@@ -1,11 +1,13 @@
 <template>
-  <div ref="root" class="relative" :class="props.autoWidth ? 'inline-block' : ''">
+  <div ref="root" class="relative" :class="usesTriggerWidth ? 'inline-block' : ''">
     <button
       ref="trigger"
       type="button"
       class="ui-input-sm flex items-center justify-between gap-2 text-foreground hover:border-primary"
-      :class="props.autoWidth ? 'w-auto min-w-0' : 'w-full'"
+      :class="triggerClass"
       :title="currentLabel"
+      :aria-label="ariaLabel || currentLabel"
+      :disabled="disabled"
       @click="toggle"
     >
       <span class="truncate">{{ currentLabel }}</span>
@@ -27,11 +29,15 @@
         :key="option.value"
         type="button"
         class="ui-menu-item"
-        :class="isSelected(option.value) ? 'bg-accent text-accent-foreground' : 'text-muted-foreground'"
+        :class="[
+          isSelected(option.value) ? 'bg-accent text-accent-foreground' : 'text-muted-foreground',
+          option.disabled ? 'cursor-not-allowed opacity-50' : '',
+        ]"
+        :disabled="option.disabled"
         @click="select(option.value)"
       >
         <span>{{ option.label }}</span>
-        <span v-if="isSelected(option.value) && indicatorMode === 'text'" class="text-xs">OK</span>
+        <span v-if="isSelected(option.value) && indicatorMode === 'text'" class="text-xs">{{ selectedIndicatorText }}</span>
         <svg
           v-else-if="isSelected(option.value) && indicatorMode === 'check'"
           aria-hidden="true"
@@ -52,27 +58,35 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-
-type Option = { label: string; value: string }
+import type { SelectOption } from '../types'
 
 /**
  * SelectMenu has two intended layouts:
  * 1) default/full-width for forms and grid filters
- * 2) autoWidth for short toolbar filters such as "全部状态" / "全部模型"
- * In autoWidth mode, the trigger follows content width and the popup is at least as wide as the trigger.
+ * 2) toolbar-style trigger width for short compact filters
+ * `variant="toolbar"` is the preferred public API.
+ * `autoWidth` is kept as a compatibility alias.
+ * In trigger-width mode, the button follows content width and the popup is at least as wide as the trigger.
  * selectedIndicator controls whether the selected option shows a marker:
- * - check: compact checkmark, good default for settings/forms
+ * - check: compact checkmark, good default for labeled controls
  * - none: cleaner for toolbar filters
  * - text: explicit OK text when a stronger confirmation style is desired
  */
 const props = defineProps<{
   modelValue: string | string[]
-  options: Array<string | Option>
+  options: Array<string | SelectOption>
   multiple?: boolean
   placeholder?: string
   placement?: 'up' | 'down'
   autoWidth?: boolean
+  width?: 'full' | 'trigger'
+  variant?: 'default' | 'toolbar'
   selectedIndicator?: 'check' | 'text' | 'none'
+  disabled?: boolean
+  ariaLabel?: string
+  maxVisibleLabels?: number
+  selectedIndicatorText?: string
+  selectedCountText?: string
 }>()
 
 const emit = defineEmits<{
@@ -85,25 +99,37 @@ const trigger = ref<HTMLButtonElement | null>(null)
 const menu = ref<HTMLElement | null>(null)
 const menuPosition = ref({ top: 0, left: 0, width: 0 })
 
-const normalizedOptions = computed<Option[]>(() =>
+const normalizedOptions = computed<SelectOption[]>(() =>
   props.options.map((option) =>
     typeof option === 'string' ? { label: option, value: option } : option
   )
 )
-const indicatorMode = computed(() => props.selectedIndicator || 'check')
+const variant = computed(() => props.variant || 'default')
+const usesTriggerWidth = computed(() => props.width === 'trigger' || props.autoWidth || variant.value === 'toolbar')
+const triggerClass = computed(() => [
+  usesTriggerWidth.value ? 'w-auto min-w-0' : 'w-full',
+  props.disabled ? 'cursor-not-allowed opacity-60 hover:border-input hover:text-foreground' : '',
+])
+const indicatorMode = computed(() => {
+  if (props.selectedIndicator) return props.selectedIndicator
+  return variant.value === 'toolbar' ? 'none' : 'check'
+})
+const visibleLabelLimit = computed(() => props.maxVisibleLabels ?? 3)
+const selectedIndicatorText = computed(() => props.selectedIndicatorText || 'Selected')
+const selectedCountText = computed(() => props.selectedCountText || 'selected')
 
-const defaultPlaceholder = '???'
+const defaultPlaceholder = 'Select'
 
 const currentLabel = computed(() => {
   if (props.multiple) {
     const values = Array.isArray(props.modelValue) ? props.modelValue : []
     if (!values.length) return props.placeholder || defaultPlaceholder
-    if (values.length <= 3) {
+    if (values.length <= visibleLabelLimit.value) {
       return values
         .map((value) => normalizedOptions.value.find((option) => option.value === value)?.label || value)
-        .join(' → ')
+        .join(' / ')
     }
-    return `?? ${values.length} ?`
+    return `${values.length} ${selectedCountText.value}`
   }
 
   const rawValue = props.modelValue == null ? '' : String(props.modelValue)
@@ -116,7 +142,7 @@ const currentLabel = computed(() => {
 const menuStyle = computed(() => ({
   top: `${menuPosition.value.top}px`,
   left: `${menuPosition.value.left}px`,
-  ...(props.autoWidth
+  ...(usesTriggerWidth.value
     ? { minWidth: `${menuPosition.value.width}px` }
     : { width: `${menuPosition.value.width}px` }),
 }))
@@ -161,6 +187,7 @@ const closeMenu = () => {
 }
 
 const toggle = () => {
+  if (props.disabled) return
   if (open.value) {
     closeMenu()
     return
@@ -176,6 +203,9 @@ const isSelected = (value: string) => {
 }
 
 const select = (value: string) => {
+  const option = normalizedOptions.value.find((item) => item.value === value)
+  if (option?.disabled) return
+
   if (props.multiple) {
     const current = Array.isArray(props.modelValue) ? props.modelValue : []
     const exists = current.includes(value)

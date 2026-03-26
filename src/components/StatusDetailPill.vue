@@ -12,7 +12,7 @@
           <div class="text-muted-foreground">{{ detail }}</div>
         </div>
         <div v-if="rawError">
-          <div class="mb-1 font-medium text-foreground">原始报错</div>
+          <div class="mb-1 font-medium text-foreground">{{ rawErrorLabel }}</div>
           <div class="break-all font-mono text-[11px] text-muted-foreground">
             {{ rawError }}
           </div>
@@ -32,11 +32,13 @@ withDefaults(defineProps<{
   detailLabel?: string
   detail: string
   rawError?: string
+  rawErrorLabel?: string
   cardClass?: string
 }>(), {
-  title: '详情',
-  detailLabel: '说明',
+  title: 'Details',
+  detailLabel: 'Message',
   rawError: '',
+  rawErrorLabel: 'Raw error',
   cardClass: 'w-72',
 })
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-panel !p-5">
+  <div class="ui-panel" :class="panelClass">
     <CardHeader :title="title" :description="description">
       <template v-if="$slots.actions" #actions>
         <slot name="actions" />
@@ -16,9 +16,11 @@ withDefaults(
   defineProps<{
     title: string
     description?: string
+    panelClass?: string
   }>(),
   {
     description: '',
+    panelClass: '!p-5',
   }
 )
 </script>

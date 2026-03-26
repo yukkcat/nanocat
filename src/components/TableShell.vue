@@ -40,7 +40,7 @@ withDefaults(defineProps<{
 }>(), {
   showEmpty: false,
   emptyColspan: 1,
-  emptyTitle: '????',
+  emptyTitle: 'No data',
   emptyDescription: '',
   wrapperClass: '',
   tableClass: '',

@@ -1,16 +1,16 @@
 # nanocat-ui
 
-A lightweight Vue 3 UI component library for dashboards, admin panels and AI tools.
+A lightweight Vue 3 UI component library for modern dashboards, admin panels and internal tools.
 
 ## What it is
 
-`nanocat-ui` is the standalone UI package extracted from a real project.
+`nanocat-ui` is a standalone UI package built from real application work.
 The goal is simple:
 
 - keep common UI pieces reusable
 - keep styles consistent
 - stay lightweight
-- make it easy to use in other Vue 3 projects
+- make it easy to drop into other Vue 3 projects
 
 ## Install
 
@@ -40,6 +40,36 @@ import uiPreset from 'nanocat-ui/tailwind-preset'
 export default {
   presets: [uiPreset],
 }
+```
+
+### 4. Make sure Tailwind scans your app files
+
+```ts
+export default {
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  presets: [uiPreset],
+}
+```
+
+## Quick example
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { SelectMenu } from 'nanocat-ui'
+import 'nanocat-ui/styles.css'
+
+const value = ref('all')
+const options = [
+  { label: 'All', value: 'all' },
+  { label: 'Active', value: 'active' },
+  { label: 'Paused', value: 'paused' },
+]
+</script>
+
+<template>
+  <SelectMenu v-model="value" :options="options" />
+</template>
 ```
 
 ## Included components
@@ -78,7 +108,7 @@ export default {
 - ViewModeSwitch
 - ActionMenu
 
-More props:
+Full component surface:
 - [COMPONENTS.md](./COMPONENTS.md)
 
 ## Local development
@@ -88,19 +118,6 @@ npm install
 npm run check
 npm run build
 ```
-
-## Version
-
-Current public version:
-- `0.1.0`
-
-## Roadmap
-
-Next steps:
-- improve docs
-- add demo pages
-- add more reusable components
-- make external integration even easier
 
 ## Changelog
 

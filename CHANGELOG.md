@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.1.1 - 2026-03-27
+
+Stability and cleanup release for `nanocat-ui`.
+
+### Improved
+- cleaned up public docs and component surface notes
+- made more default labels configurable for reuse across projects
+- aligned `FilterSelect` with the newer `SelectMenu` API
+- reduced project-specific wording in source comments and docs
+- added small style extension props for card and pill wrappers
+
+### Verified
+- `npm run check`
+- `npm run build`
+
 ## v0.1.0 - 2026-03-26
 
 First public release of `nanocat-ui`.

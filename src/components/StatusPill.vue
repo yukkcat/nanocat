@@ -1,6 +1,6 @@
 <template>
   <HoverCard :card-class="cardClass">
-    <span class="ui-pill" :class="toneClass">
+    <span class="ui-pill" :class="[toneClass, pillClass]">
       {{ label }}
     </span>
     <template #content>
@@ -24,11 +24,13 @@ withDefaults(
     title?: string
     detail?: string
     cardClass?: string
+    pillClass?: string
   }>(),
   {
     title: '',
     detail: '',
     cardClass: 'w-72',
+    pillClass: '',
   }
 )
 </script>

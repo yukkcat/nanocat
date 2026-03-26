@@ -1,8 +1,5 @@
 /**
  * nanocat-ui public entry
- *
- * frontend still imports through @/components/ui for compatibility,
- * but the actual shared implementations now live here.
  */
 export { default as ActionMenu } from './components/ActionMenu.vue'
 export { default as CardHeader } from './components/CardHeader.vue'
@@ -30,4 +27,4 @@ export { default as Toast } from './components/Toast.vue'
 export { default as ToolbarShell } from './components/ToolbarShell.vue'
 export { default as Tooltip } from './components/Tooltip.vue'
 export { default as ViewModeSwitch } from './components/ViewModeSwitch.vue'
-export type { ActionMenuItem, KeyValueItem, SegmentedOption, SegmentedValue, ToastItem } from './types'
+export type { ActionMenuItem, KeyValueItem, SegmentedOption, SegmentedValue, SelectOption, ToastItem } from './types'

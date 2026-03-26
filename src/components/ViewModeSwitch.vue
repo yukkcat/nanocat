@@ -6,8 +6,8 @@
       :class="modelValue === 'list'
         ? 'border-primary bg-primary/10 text-primary'
         : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground'"
-      title="列表视图"
-      aria-label="列表视图"
+      :title="listLabel"
+      :aria-label="listLabel"
       @click="emit('update:modelValue', 'list')"
     >
       <svg viewBox="0 0 20 20" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
@@ -23,8 +23,8 @@
       :class="modelValue === 'cards'
         ? 'border-primary bg-primary/10 text-primary'
         : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground'"
-      title="卡片视图"
-      aria-label="卡片视图"
+      :title="cardsLabel"
+      :aria-label="cardsLabel"
       @click="emit('update:modelValue', 'cards')"
     >
       <svg viewBox="0 0 20 20" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -38,9 +38,14 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
   modelValue: 'list' | 'cards'
-}>()
+  listLabel?: string
+  cardsLabel?: string
+}>(), {
+  listLabel: 'List view',
+  cardsLabel: 'Card view',
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: 'list' | 'cards'): void

@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-panel !p-4">
+  <div class="ui-panel" :class="panelClass">
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0 flex-1">
         <p class="ui-section-kicker">{{ label }}</p>
@@ -28,12 +28,14 @@ withDefaults(
     icon?: string
     iconBg?: string
     iconColor?: string
+    panelClass?: string
   }>(),
   {
     caption: '',
     icon: '',
     iconBg: '',
     iconColor: '',
+    panelClass: '!p-4',
   }
 )
 </script>

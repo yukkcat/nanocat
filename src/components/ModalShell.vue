@@ -75,7 +75,7 @@ const props = withDefaults(defineProps<{
   headerClass: '',
   bodyClass: '',
   footerClass: '',
-  closeText: '关闭',
+  closeText: 'Close',
   showClose: true,
   closeOnOverlay: true,
 })

@@ -6,8 +6,12 @@
       :multiple="multiple"
       :placeholder="placeholder"
       :placement="placement"
-      auto-width
+      variant="toolbar"
       :selected-indicator="selectedIndicator"
+      :selected-indicator-text="selectedIndicatorText"
+      :selected-count-text="selectedCountText"
+      :disabled="disabled"
+      :aria-label="ariaLabel"
       @update:model-value="emit('update:modelValue', $event)"
     />
   </div>
@@ -15,21 +19,28 @@
 
 <script setup lang="ts">
 import SelectMenu from './SelectMenu.vue'
-
-type Option = { label: string; value: string }
+import type { SelectOption } from '../types'
 
 withDefaults(defineProps<{
   modelValue: string | string[]
-  options: Array<string | Option>
+  options: Array<string | SelectOption>
   multiple?: boolean
   placeholder?: string
   placement?: 'up' | 'down'
   selectedIndicator?: 'check' | 'text' | 'none'
+  selectedIndicatorText?: string
+  selectedCountText?: string
+  disabled?: boolean
+  ariaLabel?: string
 }>(), {
   multiple: false,
   placeholder: '',
   placement: 'down',
   selectedIndicator: 'none',
+  selectedIndicatorText: '',
+  selectedCountText: '',
+  disabled: false,
+  ariaLabel: '',
 })
 
 const emit = defineEmits<{

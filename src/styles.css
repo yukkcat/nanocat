@@ -2,7 +2,7 @@
  * Shared style entry for nanocat-ui.
  *
  * This file now owns the design tokens and reusable `ui-*` classes.
- * App-specific page chrome stays in frontend/src/style.css.
+ * App-specific page layout should stay in the host app stylesheet.
  */
 @tailwind base;
 @tailwind components;

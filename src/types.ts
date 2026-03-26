@@ -6,6 +6,12 @@ export type ActionMenuItem = {
   dividerBefore?: boolean
 }
 
+export type SelectOption = {
+  label: string
+  value: string
+  disabled?: boolean
+}
+
 export type SegmentedValue = string | number
 
 export type SegmentedOption = {
