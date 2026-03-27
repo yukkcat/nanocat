@@ -35,10 +35,10 @@ withDefaults(defineProps<{
   rawErrorLabel?: string
   cardClass?: string
 }>(), {
-  title: 'Details',
-  detailLabel: 'Message',
+  title: '详情',
+  detailLabel: '说明',
   rawError: '',
-  rawErrorLabel: 'Raw error',
+  rawErrorLabel: '原始报错',
   cardClass: 'w-72',
 })
 </script>

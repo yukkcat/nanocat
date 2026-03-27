@@ -21,7 +21,7 @@ withDefaults(
   {
     hint: '',
     required: false,
-    requiredText: 'Required',
+    requiredText: '必填',
   }
 )
 </script>

@@ -60,18 +60,6 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import type { SelectOption } from '../types'
 
-/**
- * SelectMenu has two intended layouts:
- * 1) default/full-width for forms and grid filters
- * 2) toolbar-style trigger width for short compact filters
- * `variant="toolbar"` is the preferred public API.
- * `autoWidth` is kept as a compatibility alias.
- * In trigger-width mode, the button follows content width and the popup is at least as wide as the trigger.
- * selectedIndicator controls whether the selected option shows a marker:
- * - check: compact checkmark, good default for labeled controls
- * - none: cleaner for toolbar filters
- * - text: explicit OK text when a stronger confirmation style is desired
- */
 const props = defineProps<{
   modelValue: string | string[]
   options: Array<string | SelectOption>
@@ -104,6 +92,7 @@ const normalizedOptions = computed<SelectOption[]>(() =>
     typeof option === 'string' ? { label: option, value: option } : option
   )
 )
+
 const variant = computed(() => props.variant || 'default')
 const usesTriggerWidth = computed(() => props.width === 'trigger' || props.autoWidth || variant.value === 'toolbar')
 const triggerClass = computed(() => [
@@ -115,10 +104,9 @@ const indicatorMode = computed(() => {
   return variant.value === 'toolbar' ? 'none' : 'check'
 })
 const visibleLabelLimit = computed(() => props.maxVisibleLabels ?? 3)
-const selectedIndicatorText = computed(() => props.selectedIndicatorText || 'Selected')
-const selectedCountText = computed(() => props.selectedCountText || 'selected')
-
-const defaultPlaceholder = 'Select'
+const selectedIndicatorText = computed(() => props.selectedIndicatorText || '已选')
+const selectedCountText = computed(() => props.selectedCountText || '项')
+const defaultPlaceholder = '请选择'
 
 const currentLabel = computed(() => {
   if (props.multiple) {

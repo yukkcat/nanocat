@@ -43,8 +43,8 @@ withDefaults(defineProps<{
   listLabel?: string
   cardsLabel?: string
 }>(), {
-  listLabel: 'List view',
-  cardsLabel: 'Card view',
+  listLabel: '列表视图',
+  cardsLabel: '卡片视图',
 })
 
 const emit = defineEmits<{

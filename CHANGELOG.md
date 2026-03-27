@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.1.2 - 2026-03-27
+
+Packaging and compatibility release for `nanocat-ui`.
+
+### Fixed
+- preserved shared `ui-*` style classes in published CSS output
+- restored compact button and card helper classes for host apps
+- aligned default Chinese labels used by shared select and status components
+
+### Verified
+- `npm run check`
+- `npm run build`
+
 ## v0.1.1 - 2026-03-27
 
 Stability and cleanup release for `nanocat-ui`.
