@@ -23,9 +23,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed, toRefs } from 'vue'
+import { useNanocatLocale } from '../i18n'
 import StatusPill from './StatusPill.vue'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   label: string
   toneClass: string
   title?: string
@@ -35,10 +37,16 @@ withDefaults(defineProps<{
   rawErrorLabel?: string
   cardClass?: string
 }>(), {
-  title: '详情',
-  detailLabel: '说明',
+  title: '',
+  detailLabel: '',
   rawError: '',
-  rawErrorLabel: '原始报错',
+  rawErrorLabel: '',
   cardClass: 'w-72',
 })
+
+const { label, toneClass, detail, rawError, cardClass } = toRefs(props)
+const locale = useNanocatLocale()
+const title = computed(() => props.title || locale.statusDetailTitle)
+const detailLabel = computed(() => props.detailLabel || locale.statusDetailLabel)
+const rawErrorLabel = computed(() => props.rawErrorLabel || locale.statusDetailRawErrorLabel)
 </script>

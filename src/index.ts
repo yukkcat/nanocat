@@ -27,4 +27,14 @@ export { default as Toast } from './components/Toast.vue'
 export { default as ToolbarShell } from './components/ToolbarShell.vue'
 export { default as Tooltip } from './components/Tooltip.vue'
 export { default as ViewModeSwitch } from './components/ViewModeSwitch.vue'
+
+export {
+  nanocatEnUS,
+  nanocatZhCN,
+  resetNanocatLocale,
+  setNanocatLocale,
+  useNanocatLocale,
+} from './i18n'
+
+export type { NanocatLocale } from './i18n'
 export type { ActionMenuItem, KeyValueItem, SegmentedOption, SegmentedValue, SelectOption, ToastItem } from './types'

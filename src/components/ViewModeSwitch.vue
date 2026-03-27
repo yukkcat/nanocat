@@ -38,14 +38,22 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(defineProps<{
+import { computed, toRefs } from 'vue'
+import { useNanocatLocale } from '../i18n'
+
+const props = withDefaults(defineProps<{
   modelValue: 'list' | 'cards'
   listLabel?: string
   cardsLabel?: string
 }>(), {
-  listLabel: '列表视图',
-  cardsLabel: '卡片视图',
+  listLabel: '',
+  cardsLabel: '',
 })
+
+const { modelValue } = toRefs(props)
+const locale = useNanocatLocale()
+const listLabel = computed(() => props.listLabel || locale.viewModeListLabel)
+const cardsLabel = computed(() => props.cardsLabel || locale.viewModeCardsLabel)
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: 'list' | 'cards'): void

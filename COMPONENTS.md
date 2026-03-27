@@ -185,6 +185,7 @@ Each section focuses on:
 
 ### Notes
 - Small label wrapper for inputs, controls and grouped field content.
+- `requiredText` falls back to global locale (`setNanocatLocale`).
 
 ---
 
@@ -367,6 +368,7 @@ Each section focuses on:
 ### Notes
 - Core selection dropdown for forms and filters.
 - Prefer `variant="toolbar"` instead of relying on `autoWidth` directly.
+- Placeholder and selected text fall back to global locale.
 
 ---
 
@@ -412,6 +414,7 @@ Each section focuses on:
 
 ### Notes
 - Extended status chip with extra detail and raw error support.
+- `title`, `detailLabel`, and `rawErrorLabel` fall back to global locale.
 
 ---
 
@@ -528,3 +531,4 @@ Each section focuses on:
 
 ### Notes
 - Compact toggle for list / card presentation modes.
+- Labels fall back to global locale.

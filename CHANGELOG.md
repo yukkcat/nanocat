@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.1.3 - 2026-03-27
+
+Localization release for `nanocat-ui`.
+
+### Added
+- runtime locale helpers: `setNanocatLocale`, `resetNanocatLocale`, `useNanocatLocale`
+- built-in locale presets: `nanocatEnUS` and `nanocatZhCN`
+
+### Improved
+- `FormField`, `SelectMenu`, `StatusDetailPill`, and `ViewModeSwitch` now fall back to locale text instead of hard-coded defaults
+- public docs now explain localization setup and locale-driven props
+
+### Verified
+- `npm run check`
+- `npm run build`
+
 ## v0.1.2 - 2026-03-27
 
 Packaging and compatibility release for `nanocat-ui`.

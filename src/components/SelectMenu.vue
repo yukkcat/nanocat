@@ -58,6 +58,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useNanocatLocale } from '../i18n'
 import type { SelectOption } from '../types'
 
 const props = defineProps<{
@@ -87,6 +88,8 @@ const trigger = ref<HTMLButtonElement | null>(null)
 const menu = ref<HTMLElement | null>(null)
 const menuPosition = ref({ top: 0, left: 0, width: 0 })
 
+const locale = useNanocatLocale()
+
 const normalizedOptions = computed<SelectOption[]>(() =>
   props.options.map((option) =>
     typeof option === 'string' ? { label: option, value: option } : option
@@ -104,14 +107,14 @@ const indicatorMode = computed(() => {
   return variant.value === 'toolbar' ? 'none' : 'check'
 })
 const visibleLabelLimit = computed(() => props.maxVisibleLabels ?? 3)
-const selectedIndicatorText = computed(() => props.selectedIndicatorText || '已选')
-const selectedCountText = computed(() => props.selectedCountText || '项')
-const defaultPlaceholder = '请选择'
+const selectedIndicatorText = computed(() => props.selectedIndicatorText || locale.selectMenuSelectedIndicatorText)
+const selectedCountText = computed(() => props.selectedCountText || locale.selectMenuSelectedCountText)
+const defaultPlaceholder = computed(() => locale.selectMenuPlaceholder)
 
 const currentLabel = computed(() => {
   if (props.multiple) {
     const values = Array.isArray(props.modelValue) ? props.modelValue : []
-    if (!values.length) return props.placeholder || defaultPlaceholder
+    if (!values.length) return props.placeholder || defaultPlaceholder.value
     if (values.length <= visibleLabelLimit.value) {
       return values
         .map((value) => normalizedOptions.value.find((option) => option.value === value)?.label || value)
@@ -123,7 +126,7 @@ const currentLabel = computed(() => {
   const rawValue = props.modelValue == null ? '' : String(props.modelValue)
   const match = normalizedOptions.value.find((option) => String(option.value) === rawValue)
   if (match) return match.label
-  if (!rawValue.trim()) return props.placeholder || defaultPlaceholder
+  if (!rawValue.trim()) return props.placeholder || defaultPlaceholder.value
   return rawValue
 })
 

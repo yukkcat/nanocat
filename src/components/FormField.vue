@@ -11,7 +11,10 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(
+import { computed, toRefs } from 'vue'
+import { useNanocatLocale } from '../i18n'
+
+const props = withDefaults(
   defineProps<{
     label: string
     hint?: string
@@ -21,7 +24,11 @@ withDefaults(
   {
     hint: '',
     required: false,
-    requiredText: '必填',
+    requiredText: '',
   }
 )
+
+const { label, hint, required } = toRefs(props)
+const locale = useNanocatLocale()
+const requiredText = computed(() => props.requiredText || locale.formFieldRequiredText)
 </script>

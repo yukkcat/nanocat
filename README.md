@@ -51,6 +51,26 @@ export default {
 }
 ```
 
+## Localization
+
+`nanocat-ui` now supports runtime locale configuration. Defaults are `en-US`.
+
+```ts
+import { setNanocatLocale, nanocatZhCN } from 'nanocat-ui'
+
+// Call once in your app entry.
+setNanocatLocale(nanocatZhCN)
+```
+
+You can also pass your own language pack:
+
+```ts
+setNanocatLocale({
+  selectMenuPlaceholder: 'Seleziona',
+  formFieldRequiredText: 'Obbligatorio',
+})
+```
+
 ## Quick example
 
 ```vue
