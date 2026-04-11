@@ -1,10 +1,10 @@
 <template>
   <div ref="root" class="relative inline-flex">
-    <button
-      type="button"
-      class="ui-btn ui-btn-xs ui-btn-outline justify-between gap-2"
-      :class="buttonClass"
+    <Button
+      variant="outline"
+      :size="sizeClasses.menuButton === 'ui-btn-xs' ? 'xs' : 'sm'"
       :disabled="disabled"
+      :root-class="`justify-between gap-2 ${resolvedTriggerClass}`.trim()"
       @click="toggle"
     >
       <span>{{ label }}</span>
@@ -17,12 +17,12 @@
       >
         <path d="M5 7l5 6 5-6H5z" />
       </svg>
-    </button>
+    </Button>
 
     <div
       v-if="open && !disabled"
-      class="absolute bottom-full mb-2 rounded-2xl border border-border bg-card p-1.5 shadow-2xl"
-      :class="[align === 'left' ? 'left-0' : 'right-0', menuClass]"
+      class="ui-floating-panel absolute bottom-full mb-2 !rounded-2xl !p-1.5"
+      :class="[align === 'left' ? 'left-0' : 'right-0', resolvedContentClass]"
     >
       <template v-for="item in items" :key="item.key">
         <div
@@ -32,7 +32,7 @@
         <button
           type="button"
           class="ui-menu-item"
-          :class="item.danger ? 'text-red-500 hover:bg-red-500/10 hover:text-red-500' : ''"
+          :class="item.danger ? 'ui-menu-item-danger' : ''"
           :disabled="item.disabled"
           @click="handleSelect(item.key)"
         >
@@ -44,20 +44,29 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import type { ActionMenuItem } from '../types'
+import Button from './Button.vue'
+import { getToolbarSizeClasses } from '../presets'
+import type { ActionMenuItem, UiSize } from '../types'
 
 const props = withDefaults(defineProps<{
   label: string
   items: ActionMenuItem[]
   disabled?: boolean
   align?: 'left' | 'right'
+  size?: UiSize
+  triggerClass?: string
   buttonClass?: string
+  contentClass?: string
   menuClass?: string
 }>(), {
   disabled: false,
   align: 'right',
+  size: 'sm',
+  triggerClass: '',
   buttonClass: '',
+  contentClass: '',
   menuClass: 'min-w-max',
 })
 
@@ -67,6 +76,9 @@ const emit = defineEmits<{
 
 const open = ref(false)
 const root = ref<HTMLElement | null>(null)
+const sizeClasses = computed(() => getToolbarSizeClasses(props.size))
+const resolvedTriggerClass = computed(() => props.triggerClass || props.buttonClass)
+const resolvedContentClass = computed(() => props.contentClass || props.menuClass)
 
 function close() {
   open.value = false

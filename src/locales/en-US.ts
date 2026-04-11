@@ -5,9 +5,11 @@ export const nanocatEnUS: NanocatLocale = {
   selectMenuPlaceholder: 'Select',
   selectMenuSelectedIndicatorText: 'Selected',
   selectMenuSelectedCountText: 'items',
+  modalCloseText: 'Close',
   statusDetailTitle: 'Details',
   statusDetailLabel: 'Description',
   statusDetailRawErrorLabel: 'Raw Error',
+  tableShellEmptyTitle: 'No data',
   viewModeListLabel: 'List view',
   viewModeCardsLabel: 'Card view',
 }

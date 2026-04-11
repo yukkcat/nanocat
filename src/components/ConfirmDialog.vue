@@ -1,35 +1,42 @@
 <template>
-  <teleport to="body">
-    <div
-      v-if="open"
-      class="fixed inset-0 z-[300] flex items-center justify-center bg-black/30 px-4"
-      @click.self="$emit('cancel')"
-    >
-      <div class="ui-overlay-panel w-full max-w-sm shadow-2xl">
-        <p class="ui-dialog-title">{{ title }}</p>
-        <p class="ui-dialog-body">{{ message }}</p>
-        <div class="mt-6 flex items-center justify-end gap-2">
-          <button
-            type="button"
-            class="ui-btn ui-btn-xs ui-btn-outline min-w-14 justify-center text-muted-foreground hover:border-foreground hover:text-foreground"
-            @click="$emit('cancel')"
-          >
-            {{ cancelText }}
-          </button>
-          <button
-            type="button"
-            class="ui-btn ui-btn-xs ui-btn-primary min-w-14 justify-center"
-            @click="$emit('confirm')"
-          >
-            {{ confirmText }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </teleport>
+  <ModalShell
+    :open="open"
+    :title="title"
+    size-class="max-w-sm"
+    root-class="shadow-[var(--shadow-floating)]"
+    header-class="border-b-0 pb-0"
+    body-class="px-5 pt-3 pb-5"
+    footer-class="border-t-0 pt-0"
+    :show-close="false"
+    @close="$emit('cancel')"
+  >
+    <p class="ui-dialog-body">{{ message }}</p>
+
+    <template #footer>
+      <Button
+        size="xs"
+        variant="outline"
+        root-class="min-w-14 justify-center text-muted-foreground"
+        @click="$emit('cancel')"
+      >
+        {{ cancelText }}
+      </Button>
+      <Button
+        size="xs"
+        variant="primary"
+        root-class="min-w-14 justify-center"
+        @click="$emit('confirm')"
+      >
+        {{ confirmText }}
+      </Button>
+    </template>
+  </ModalShell>
 </template>
 
 <script setup lang="ts">
+import Button from './Button.vue'
+import ModalShell from './ModalShell.vue'
+
 defineProps<{
   open: boolean
   title: string

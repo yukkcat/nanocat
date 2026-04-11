@@ -12,15 +12,11 @@
   <Teleport to="body">
     <div
       v-if="visible"
-      class="fixed z-[9999] -translate-x-1/2 -translate-y-full rounded-md bg-foreground px-2 py-1 text-[10px]
-             text-background shadow-lg"
+      class="ui-tooltip"
       :style="tooltipStyle"
     >
       {{ text }}
-      <span
-        class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4
-               border-x-transparent border-t-foreground"
-      ></span>
+      <span class="ui-tooltip-arrow"></span>
     </div>
   </Teleport>
 </template>

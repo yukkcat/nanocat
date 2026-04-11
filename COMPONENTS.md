@@ -18,7 +18,10 @@ Each section focuses on:
 - `items: ActionMenuItem[]`
 - `disabled?: boolean`
 - `align?: "left" | "right"`
+- `size?: "sm" | "md"`
+- `triggerClass?: string`
 - `buttonClass?: string`
+- `contentClass?: string`
 - `menuClass?: string`
 
 ### Emits
@@ -32,11 +35,36 @@ Each section focuses on:
 
 ---
 
+## Button
+
+### Props
+- `type?: "button" | "submit" | "reset"`
+- `size?: "xs" | "sm" | "md"`
+- `variant?: "outline" | "primary" | "danger"`
+- `disabled?: boolean`
+- `iconOnly?: boolean`
+- `block?: boolean`
+- `rootClass?: string`
+
+### Emits
+- native button events
+
+### Slots
+- `default`
+
+### Notes
+- Core action button component for primary, outline and danger actions.
+- Prefer this over hand-writing `ui-btn ui-btn-*` combinations.
+
+---
+
 ## CardHeader
 
 ### Props
 - `title: string`
 - `description?: string`
+- `variant?: "divider" | "plain"`
+- `size?: "sm" | "md"`
 - `compact?: boolean`
 
 ### Emits
@@ -55,6 +83,9 @@ Each section focuses on:
 ### Props
 - `title: string`
 - `description?: string`
+- `variant?: "soft" | "outline"`
+- `size?: "sm" | "md"`
+- `rootClass?: string`
 - `panelClass?: string`
 
 ### Emits
@@ -86,6 +117,42 @@ Each section focuses on:
 
 ---
 
+## CodeBlock
+
+### Props
+- `code?: string`
+- `rootClass?: string`
+
+### Emits
+- none
+
+### Slots
+- none
+
+### Notes
+- Lightweight monospace code/output block surface.
+
+---
+
+## CalloutBox
+
+### Props
+- `tone?: "neutral" | "success" | "warning" | "error" | "info"`
+- `variant?: "soft" | "outline"`
+- `size?: "sm" | "md"`
+- `rootClass?: string`
+
+### Emits
+- none
+
+### Slots
+- `default`
+
+### Notes
+- Compact inline notice / explanation block.
+
+---
+
 ## ConfirmDialog
 
 ### Props
@@ -112,8 +179,11 @@ Each section focuses on:
 ### Props
 - `title: string`
 - `description?: string`
-- `textClass?: string`
+- `tone?: "neutral" | "success" | "warning" | "error" | "info"`
+- `variant?: "soft" | "outline"`
+- `size?: "sm" | "md"`
 - `plain?: boolean`
+- `rootClass?: string`
 
 ### Emits
 - none
@@ -151,6 +221,7 @@ Each section focuses on:
 - `multiple?: boolean`
 - `placeholder?: string`
 - `placement?: "up" | "down"`
+- `size?: "sm" | "md"`
 - `selectedIndicator?: "check" | "text" | "none"`
 - `selectedIndicatorText?: string`
 - `selectedCountText?: string`
@@ -195,6 +266,10 @@ Each section focuses on:
 - `title?: string`
 - `description?: string`
 - `bodyClass?: string`
+- `variant?: "soft" | "outline"`
+- `size?: "sm" | "md"`
+- `rootClass?: string`
+- `panelClass?: string`
 
 ### Emits
 - none
@@ -242,11 +317,38 @@ Each section focuses on:
 
 ---
 
+## Input
+
+### Props
+- `modelValue?: string | number`
+- `type?: "text" | "password" | "email" | "url" | "search" | "number"`
+- `placeholder?: string`
+- `size?: "sm" | "md"`
+- `disabled?: boolean`
+- `readonly?: boolean`
+- `block?: boolean`
+- `rootClass?: string`
+
+### Emits
+- `update:modelValue`
+
+### Slots
+- none
+
+### Notes
+- Core compact text input component for forms, toolbars and settings panels.
+- Prefer this over hand-writing `ui-input-*` classes.
+
+---
+
 ## KeyValueList
 
 ### Props
 - `items: KeyValueItem[]`
 - `columns?: 1 | 2 | 3`
+- `variant?: "soft" | "outline"`
+- `size?: "sm" | "md"`
+- `rootClass?: string`
 
 ### Emits
 - none
@@ -262,7 +364,11 @@ Each section focuses on:
 ## MetaChip
 
 ### Props
+- `tone?: "neutral" | "success" | "warning" | "error" | "info"`
+- `variant?: "soft" | "outline" | "solid"`
+- `size?: "sm" | "md"`
 - `toneClass?: string`
+- `chipClass?: string`
 
 ### Emits
 - none
@@ -282,6 +388,7 @@ Each section focuses on:
 - `title?: string`
 - `description?: string`
 - `sizeClass?: string`
+- `rootClass?: string`
 - `panelClass?: string`
 - `overlayClass?: string`
 - `headerClass?: string`
@@ -301,6 +408,7 @@ Each section focuses on:
 
 ### Notes
 - General-purpose modal wrapper with optional header and footer slots.
+- `closeText` falls back to global locale (`setNanocatLocale`).
 
 ---
 
@@ -309,7 +417,10 @@ Each section focuses on:
 ### Props
 - `title: string`
 - `description?: string`
-- `tone?: "neutral" | "success" | "warning" | "error"`
+- `tone?: "neutral" | "success" | "warning" | "error" | "info"`
+- `variant?: "soft" | "outline"`
+- `size?: "sm" | "md"`
+- `rootClass?: string`
 
 ### Emits
 - none
@@ -379,8 +490,12 @@ Each section focuses on:
 - `value: string | number`
 - `caption?: string`
 - `icon?: string`
+- `iconTone?: "neutral" | "success" | "warning" | "error" | "info"`
 - `iconBg?: string`
 - `iconColor?: string`
+- `variant?: "soft" | "outline"`
+- `size?: "sm" | "md"`
+- `rootClass?: string`
 - `panelClass?: string`
 
 ### Emits
@@ -398,7 +513,10 @@ Each section focuses on:
 
 ### Props
 - `label: string`
-- `toneClass: string`
+- `tone?: "neutral" | "success" | "warning" | "error" | "info"`
+- `variant?: "soft" | "outline" | "solid"`
+- `size?: "sm" | "md"`
+- `toneClass?: string`
 - `title?: string`
 - `detailLabel?: string`
 - `detail: string`
@@ -422,7 +540,10 @@ Each section focuses on:
 
 ### Props
 - `label: string`
-- `toneClass: string`
+- `tone?: "neutral" | "success" | "warning" | "error" | "info"`
+- `variant?: "soft" | "outline" | "solid"`
+- `size?: "sm" | "md"`
+- `toneClass?: string`
 - `title?: string`
 - `detail?: string`
 - `cardClass?: string`
@@ -446,6 +567,9 @@ Each section focuses on:
 - `emptyColspan?: number`
 - `emptyTitle?: string`
 - `emptyDescription?: string`
+- `variant?: "soft" | "outline"`
+- `size?: "sm" | "md"`
+- `rootClass?: string`
 - `wrapperClass?: string`
 - `tableClass?: string`
 - `headClass?: string`
@@ -461,6 +585,7 @@ Each section focuses on:
 
 ### Notes
 - Scroll-safe table wrapper with built-in empty-state support.
+- `emptyTitle` falls back to global locale (`setNanocatLocale`).
 
 ---
 
@@ -513,6 +638,29 @@ Each section focuses on:
 
 ### Notes
 - Small floating text tooltip.
+
+---
+
+## ValueSurface
+
+### Props
+- `value?: string | number`
+- `tag?: string`
+- `mono?: boolean`
+- `size?: "sm" | "md"`
+- `emphasis?: "default" | "muted"`
+- `breakMode?: "normal" | "words" | "all"`
+- `rootClass?: string`
+
+### Emits
+- none
+
+### Slots
+- `default`
+
+### Notes
+- Minimal value / code / endpoint surface for read-only text blocks.
+- Useful for API endpoints, tokens, ids and compact metadata displays.
 
 ---
 

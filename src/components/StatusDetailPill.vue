@@ -1,6 +1,9 @@
 <template>
   <StatusPill
     :label="label"
+    :tone="tone"
+    :variant="variant"
+    :size="size"
     :tone-class="toneClass"
     :title="title"
     :card-class="cardClass"
@@ -8,12 +11,12 @@
     <template #content>
       <div class="space-y-2 text-xs leading-5">
         <div>
-          <div class="mb-1 font-medium text-foreground">{{ detailLabel }}</div>
-          <div class="text-muted-foreground">{{ detail }}</div>
+          <div class="ui-status-title mb-1">{{ detailLabel }}</div>
+          <div class="ui-status-body">{{ detail }}</div>
         </div>
         <div v-if="rawError">
-          <div class="mb-1 font-medium text-foreground">{{ rawErrorLabel }}</div>
-          <div class="break-all font-mono text-[11px] text-muted-foreground">
+          <div class="ui-status-title mb-1">{{ rawErrorLabel }}</div>
+          <div class="ui-status-body break-all font-mono text-[11px]">
             {{ rawError }}
           </div>
         </div>
@@ -29,7 +32,10 @@ import StatusPill from './StatusPill.vue'
 
 const props = withDefaults(defineProps<{
   label: string
-  toneClass: string
+  tone?: 'neutral' | 'success' | 'warning' | 'error' | 'info'
+  variant?: 'soft' | 'outline' | 'solid'
+  size?: 'sm' | 'md'
+  toneClass?: string
   title?: string
   detailLabel?: string
   detail: string
@@ -37,6 +43,10 @@ const props = withDefaults(defineProps<{
   rawErrorLabel?: string
   cardClass?: string
 }>(), {
+  tone: 'neutral',
+  variant: 'soft',
+  size: 'sm',
+  toneClass: '',
   title: '',
   detailLabel: '',
   rawError: '',
@@ -44,7 +54,7 @@ const props = withDefaults(defineProps<{
   cardClass: 'w-72',
 })
 
-const { label, toneClass, detail, rawError, cardClass } = toRefs(props)
+const { label, tone, variant, size, toneClass, detail, rawError, cardClass } = toRefs(props)
 const locale = useNanocatLocale()
 const title = computed(() => props.title || locale.statusDetailTitle)
 const detailLabel = computed(() => props.detailLabel || locale.statusDetailLabel)

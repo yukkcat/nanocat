@@ -22,7 +22,7 @@
       <div
         v-if="visible"
         ref="cardRef"
-        class="fixed z-[9999] rounded-lg border border-border bg-card p-3 shadow-lg"
+        class="ui-floating-panel fixed z-[9999] !rounded-lg !p-3"
         :class="cardClass"
         :style="tooltipStyle"
         @mouseenter="handleTooltipEnter"

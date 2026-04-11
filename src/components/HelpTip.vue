@@ -1,6 +1,11 @@
 <template>
   <Tooltip :text="text">
-    <span class="help-dot">?</span>
+    <span
+      class="ui-help-dot"
+      aria-hidden="true"
+    >
+      ?
+    </span>
   </Tooltip>
 </template>
 

@@ -22,9 +22,34 @@ npm install nanocat-ui vue @iconify/vue
 
 ### 1. Import styles
 
+Default theme:
+
 ```ts
 import 'nanocat-ui/styles.css'
 ```
+
+Equivalent explicit import:
+
+```ts
+import 'nanocat-ui/themes/default.css'
+```
+
+Use the shared dashboard host theme:
+
+```ts
+import 'nanocat-ui/themes/dashboard.css'
+```
+
+Do not import multiple themes in the same entry.
+`dashboard.css` already includes the default theme.
+
+Advanced:
+
+```ts
+import 'nanocat-ui/styles/base.css'
+```
+
+Use `styles/base.css` only when you want the shared component primitives without any theme entry.
 
 ### 2. Import components
 
@@ -95,6 +120,7 @@ const options = [
 ## Included components
 
 ### Form / select
+- Input
 - Checkbox
 - SelectMenu
 - FilterSelect
@@ -108,6 +134,7 @@ const options = [
 - MetaChip
 - ResultState
 - EmptyState
+- CalloutBox
 - Toast
 - HelpTip
 - Tooltip
@@ -119,17 +146,37 @@ const options = [
 - ToolbarShell
 - TableShell
 - KeyValueList
+- ValueSurface
+- CodeBlock
 - ModalShell
 - ConfirmDialog
 - HoverCard
 
 ### Switch / actions
+- Button
 - SegmentedTabs
 - ViewModeSwitch
 - ActionMenu
 
 Full component surface:
 - [COMPONENTS.md](./COMPONENTS.md)
+
+## Style layering
+
+`nanocat-ui` is now split into two style layers:
+
+- `styles.css`
+  Default theme entry.
+- `themes/default.css`
+  Minimal theme that only includes the shared component base.
+- `themes/dashboard.css`
+  Host-level dashboard presentation such as fonts, page background, heading style and scrollbar skin.
+
+Recommended rule:
+
+- component structure belongs in the component package
+- visual personality belongs in a theme
+- page layout belongs in the app
 
 ## Local development
 

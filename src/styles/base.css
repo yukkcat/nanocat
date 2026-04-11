@@ -1,0 +1,329 @@
+/*
+ * Base design tokens and reusable ui-* classes for nanocat-ui.
+ *
+ * Keep this file focused on component-facing primitives:
+ * - tokens
+ * - control sizes
+ * - shared surfaces
+ * - reusable utility classes consumed by components
+ *
+ * Do not put app-specific fonts, page backgrounds, or business layouts here.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --primary: 0 0% 10%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 0 0% 90%;
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 86%;
+    --input: 0 0% 86%;
+    --ring: 0 0% 10%;
+
+    --radius: 1rem;
+
+    --tone-success-border: 152 60% 82%;
+    --tone-success-bg: 151 65% 95%;
+    --tone-success-foreground: 160 84% 24%;
+    --tone-success-strong: 160 84% 39%;
+
+    --tone-warning-border: 42 92% 78%;
+    --tone-warning-bg: 48 100% 94%;
+    --tone-warning-foreground: 32 95% 30%;
+    --tone-warning-strong: 32 95% 44%;
+
+    --tone-error-border: 346 77% 82%;
+    --tone-error-bg: 353 100% 96%;
+    --tone-error-foreground: 346 77% 32%;
+    --tone-error-strong: 346 77% 49%;
+
+    --tone-info-border: 198 87% 82%;
+    --tone-info-bg: 204 100% 96%;
+    --tone-info-foreground: 199 89% 32%;
+    --tone-info-strong: 199 89% 48%;
+
+    --shadow-inset-soft: 0 1px 0 rgba(255, 255, 255, 0.45) inset;
+    --shadow-elevated: 0 10px 28px rgba(15, 23, 42, 0.08);
+    --shadow-floating: 0 14px 32px rgba(15, 23, 42, 0.12);
+    --shadow-toast: 0 12px 30px rgba(15, 23, 42, 0.08), 0 3px 10px rgba(15, 23, 42, 0.05);
+    --overlay-backdrop: rgba(0, 0, 0, 0.4);
+
+    --toast-success-border: hsl(var(--tone-success-border) / 0.7);
+    --toast-success-bg-top: hsl(var(--tone-success-bg) / 0.92);
+    --toast-success-bg-bottom: hsl(var(--card) / 0.985);
+
+    --toast-error-border: hsl(var(--tone-error-border) / 0.7);
+    --toast-error-bg-top: hsl(var(--tone-error-bg) / 0.92);
+    --toast-error-bg-bottom: hsl(var(--card) / 0.985);
+
+    --toast-warning-border: hsl(var(--tone-warning-border) / 0.78);
+    --toast-warning-bg-top: hsl(var(--tone-warning-bg) / 0.94);
+    --toast-warning-bg-bottom: hsl(var(--card) / 0.985);
+
+    --toast-info-border: hsl(var(--tone-info-border) / 0.7);
+    --toast-info-bg-top: hsl(var(--tone-info-bg) / 0.92);
+    --toast-info-bg-bottom: hsl(var(--card) / 0.985);
+  }
+}
+
+.ui-toolbar {
+  @apply flex flex-wrap items-center gap-2.5;
+}
+
+.ui-toolbar-group {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+.ui-btn {
+  @apply inline-flex items-center justify-center rounded-full border border-border text-foreground transition-colors duration-150 ease-out;
+  @apply disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.ui-btn-sm {
+  @apply h-8 px-3 text-xs font-medium;
+}
+
+.ui-btn-xs {
+  @apply h-7 px-2.5 text-[11px] font-medium;
+}
+
+.ui-btn-md {
+  @apply h-8 px-3.5 text-xs font-medium;
+}
+
+.ui-btn-icon {
+  @apply h-8 w-8 p-0;
+}
+
+.ui-btn-icon-sm {
+  @apply h-7 w-7 p-0;
+}
+
+.ui-btn-outline {
+  @apply bg-transparent hover:border-primary hover:text-primary;
+}
+
+.ui-btn-primary {
+  @apply border-transparent bg-primary text-primary-foreground hover:opacity-90;
+}
+
+.ui-btn-danger {
+  @apply border-destructive/40 text-destructive hover:border-destructive hover:bg-destructive/5;
+}
+
+.ui-pill {
+  @apply inline-flex items-center whitespace-nowrap rounded-full border;
+  @apply leading-none shadow-[var(--shadow-inset-soft)];
+}
+
+.ui-chip {
+  @apply inline-flex items-center whitespace-nowrap rounded-full border;
+  @apply leading-none shadow-[var(--shadow-inset-soft)];
+}
+
+.ui-meta-chip {
+  @apply inline-flex items-center whitespace-nowrap rounded-full border;
+  @apply leading-none shadow-[var(--shadow-inset-soft)];
+}
+
+.ui-badge {
+  @apply inline-flex items-center rounded px-2 py-0.5 text-[10px] font-semibold;
+}
+
+.ui-input-sm {
+  @apply h-8 rounded-full border border-input bg-background px-3 text-xs text-foreground transition-colors duration-150 ease-out;
+  @apply placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-0;
+}
+
+.ui-input-md {
+  @apply h-11 rounded-2xl border border-input bg-background px-4 text-sm text-foreground transition-colors duration-150 ease-out;
+  @apply placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-0;
+}
+
+.ui-textarea-sm {
+  @apply w-full rounded-2xl border border-input bg-background px-3 py-2 text-xs text-foreground transition-colors duration-150 ease-out;
+  @apply placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-0;
+}
+
+.ui-field-label {
+  @apply mb-1 block text-xs text-muted-foreground;
+}
+
+.ui-section-title {
+  @apply text-base font-semibold text-foreground;
+}
+
+.ui-card-title {
+  @apply text-sm font-semibold text-foreground;
+}
+
+.ui-card-description {
+  @apply text-muted-foreground;
+}
+
+.ui-section-kicker {
+  @apply text-xs uppercase tracking-[0.3em] text-muted-foreground;
+}
+
+.ui-subsection-title {
+  @apply text-sm font-medium text-foreground;
+}
+
+.ui-status-title {
+  @apply text-xs font-medium text-foreground;
+}
+
+.ui-status-body {
+  @apply text-xs leading-5 text-muted-foreground;
+}
+
+.ui-segmented {
+  @apply flex items-center gap-1 rounded-full border border-border bg-muted/30 p-1;
+}
+
+.ui-segmented-btn {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[11px] font-medium text-muted-foreground transition-all;
+  @apply hover:bg-accent/50 hover:text-foreground;
+}
+
+.ui-segmented-btn-active {
+  @apply border-border bg-accent/50 font-medium text-foreground;
+}
+
+.ui-segmented-count {
+  @apply inline-flex min-w-[1.2rem] items-center justify-center rounded-full bg-border/90 px-1.5 text-[10px] leading-4 text-muted-foreground;
+}
+
+.ui-segmented-btn-active .ui-segmented-count {
+  @apply bg-border text-foreground;
+}
+
+.ui-panel {
+  @apply rounded-3xl border border-border bg-card p-6;
+}
+
+.ui-card {
+  @apply rounded-2xl border border-border bg-card p-4;
+}
+
+.ui-card-sm {
+  @apply rounded-2xl border border-border bg-card px-4 py-3;
+}
+
+.ui-surface {
+  @apply rounded-2xl border border-border bg-card;
+}
+
+.ui-callout {
+  @apply rounded-2xl border px-4 py-3;
+}
+
+.ui-callout-muted {
+  @apply border-border bg-muted/30 text-muted-foreground;
+}
+
+.ui-code-block {
+  @apply overflow-x-auto rounded-2xl border border-border bg-card px-4 py-3;
+  @apply whitespace-pre-wrap font-mono text-xs text-foreground;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+}
+
+.ui-code-block::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.ui-code-block::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ui-code-block::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.35);
+  background-clip: content-box;
+}
+
+.ui-value-surface {
+  @apply rounded-2xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground;
+}
+
+.ui-value-surface-mono {
+  @apply font-mono;
+}
+
+.ui-overlay-panel {
+  @apply rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-elevated)];
+}
+
+.ui-modal-panel {
+  @apply ui-surface w-full overflow-hidden shadow-[var(--shadow-elevated)];
+}
+
+.ui-floating-panel {
+  @apply rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-floating)];
+}
+
+.ui-overlay-backdrop {
+  background: var(--overlay-backdrop);
+}
+
+.ui-toast-card {
+  @apply flex w-full items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 shadow-[var(--shadow-toast)];
+}
+
+.ui-tooltip {
+  @apply fixed z-[9999] -translate-x-1/2 -translate-y-full rounded-md bg-foreground px-2 py-1 text-[10px] text-background shadow-[var(--shadow-floating)];
+}
+
+.ui-tooltip-arrow {
+  @apply absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-foreground;
+}
+
+.ui-help-dot {
+  @apply inline-flex h-4 w-4 items-center justify-center rounded-full border border-border text-[10px] leading-none text-muted-foreground;
+  cursor: help;
+}
+
+.ui-help-dot:hover {
+  @apply border-foreground/30 text-foreground;
+}
+
+.ui-dialog-title {
+  @apply text-sm font-semibold text-foreground;
+}
+
+.ui-dialog-body {
+  @apply mt-2 text-sm text-muted-foreground;
+}
+
+.ui-menu-item {
+  @apply flex h-8 w-full items-center justify-between rounded-full px-3 text-left text-xs transition-colors;
+  @apply hover:bg-accent hover:text-foreground;
+}
+
+.ui-menu-item-danger {
+  @apply text-[hsl(var(--tone-error-foreground))];
+  @apply hover:bg-[hsl(var(--tone-error-bg)/0.7)] hover:text-[hsl(var(--tone-error-strong))];
+}

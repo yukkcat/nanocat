@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.1.4 - 2026-04-11
+
+### Added
+- `Button` for shared primary / outline / danger actions
+- `Input` for compact text and number controls
+- `CalloutBox` for inline notices and explanations
+- `CodeBlock` for compact log, payload, and command display
+- `ValueSurface` for compact read-only value, endpoint, token and metadata blocks
+- public `nanocat-ui/styles/base.css` export for advanced consumers that only want component primitives
+
+### Improved
+- expanded public docs so the exported surface matches the package entry
+- clarified style layer docs so base / theme entry points are no longer mixed together
+
 ## v0.1.3 - 2026-03-27
 
 Localization release for `nanocat-ui`.

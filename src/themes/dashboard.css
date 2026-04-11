@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&display=swap");
+@import "./default.css";
+
+/*
+ * Dashboard host theme.
+ *
+ * This file intentionally avoids redefining component structure classes such as
+ * `.ui-btn` or `.ui-panel`. It only provides host-level presentation so it can
+ * sit on top of the shared component base without fighting it.
+ */
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  font-size: 15px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  font-family: "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image:
+    radial-gradient(900px circle at 10% -20%, rgba(0, 0, 0, 0.04), transparent 45%),
+    radial-gradient(700px circle at 90% 0%, rgba(0, 0, 0, 0.05), transparent 40%),
+    linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--background)) 100%);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  pointer-events: none;
+  background-image: linear-gradient(120deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.01em;
+  font-family: "Noto Serif SC", "Georgia", serif;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.35);
+  background-clip: content-box;
+}
+
+.scrollbar-slim {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+}
+
+.scrollbar-slim::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-slim::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-slim::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.35);
+  background-clip: content-box;
+}

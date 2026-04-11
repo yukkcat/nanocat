@@ -8,8 +8,8 @@
     >
       <div class="flex min-h-full items-center justify-center">
         <div
-          class="ui-surface w-full overflow-hidden shadow-lg"
-          :class="[sizeClass, panelClass]"
+          class="ui-modal-panel"
+          :class="[sizeClass, resolvedRootClass]"
           role="dialog"
           aria-modal="true"
         >
@@ -25,14 +25,15 @@
               </div>
             </slot>
 
-            <button
+            <Button
               v-if="showClose"
-              type="button"
-              class="ui-btn ui-btn-xs ui-btn-outline min-w-14 justify-center text-muted-foreground"
+              size="xs"
+              variant="outline"
+              root-class="min-w-14 justify-center text-muted-foreground"
               @click="handleClose('button')"
             >
-              {{ closeText }}
-            </button>
+              {{ resolvedCloseText }}
+            </Button>
           </div>
 
           <div class="px-4 py-3" :class="bodyClass">
@@ -53,11 +54,17 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useNanocatLocale } from '../i18n'
+import { resolveRootClass } from '../presets'
+import Button from './Button.vue'
+
 const props = withDefaults(defineProps<{
   open: boolean
   title?: string
   description?: string
   sizeClass?: string
+  rootClass?: string
   panelClass?: string
   overlayClass?: string
   headerClass?: string
@@ -70,12 +77,13 @@ const props = withDefaults(defineProps<{
   title: '',
   description: '',
   sizeClass: 'max-w-[44rem]',
+  rootClass: '',
   panelClass: '',
-  overlayClass: 'bg-black/40',
+  overlayClass: 'ui-overlay-backdrop',
   headerClass: '',
   bodyClass: '',
   footerClass: '',
-  closeText: 'Close',
+  closeText: '',
   showClose: true,
   closeOnOverlay: true,
 })
@@ -83,6 +91,10 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
+
+const locale = useNanocatLocale()
+const resolvedRootClass = computed(() => resolveRootClass(props.rootClass, props.panelClass))
+const resolvedCloseText = computed(() => props.closeText || locale.modalCloseText)
 
 function handleClose(source: 'overlay' | 'button') {
   if (source === 'overlay' && !props.closeOnOverlay) {

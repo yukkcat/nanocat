@@ -1,0 +1,10 @@
+/*
+ * Default nanocat-ui theme.
+ *
+ * This is the minimal theme layer:
+ * - imports the shared component base
+ * - does not add product-specific host styling
+ *
+ * Most consumers can start here.
+ */
+@import "../styles/base.css";

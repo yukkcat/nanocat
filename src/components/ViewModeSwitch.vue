@@ -2,10 +2,11 @@
   <div class="flex items-center gap-2">
     <button
       type="button"
-      class="flex h-8 w-8 items-center justify-center rounded-full border transition-colors"
+      class="flex items-center justify-center rounded-full border transition-colors"
       :class="modelValue === 'list'
         ? 'border-primary bg-primary/10 text-primary'
         : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground'"
+      :style="buttonStyle"
       :title="listLabel"
       :aria-label="listLabel"
       @click="emit('update:modelValue', 'list')"
@@ -19,10 +20,11 @@
 
     <button
       type="button"
-      class="flex h-8 w-8 items-center justify-center rounded-full border transition-colors"
+      class="flex items-center justify-center rounded-full border transition-colors"
       :class="modelValue === 'cards'
         ? 'border-primary bg-primary/10 text-primary'
         : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground'"
+      :style="buttonStyle"
       :title="cardsLabel"
       :aria-label="cardsLabel"
       @click="emit('update:modelValue', 'cards')"
@@ -43,9 +45,11 @@ import { useNanocatLocale } from '../i18n'
 
 const props = withDefaults(defineProps<{
   modelValue: 'list' | 'cards'
+  size?: 'sm' | 'md'
   listLabel?: string
   cardsLabel?: string
 }>(), {
+  size: 'sm',
   listLabel: '',
   cardsLabel: '',
 })
@@ -54,6 +58,11 @@ const { modelValue } = toRefs(props)
 const locale = useNanocatLocale()
 const listLabel = computed(() => props.listLabel || locale.viewModeListLabel)
 const cardsLabel = computed(() => props.cardsLabel || locale.viewModeCardsLabel)
+const buttonStyle = computed(() => (
+  props.size === 'md'
+    ? { width: '2.25rem', height: '2.25rem' }
+    : { width: '2rem', height: '2rem' }
+))
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: 'list' | 'cards'): void

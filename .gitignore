@@ -2,5 +2,7 @@ node_modules/
 dist/
 .vite/
 *.log
+*.tgz
+playground-*.png
 .DS_Store
 Thumbs.db

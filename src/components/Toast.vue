@@ -11,7 +11,7 @@
           <div class="toast-icon-wrap">
             <svg
               v-if="toast.type === 'success'"
-              class="toast-icon text-emerald-600"
+              class="toast-icon toast-icon--success"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -20,7 +20,7 @@
             </svg>
             <svg
               v-else-if="toast.type === 'error'"
-              class="toast-icon text-rose-600"
+              class="toast-icon toast-icon--error"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -29,7 +29,7 @@
             </svg>
             <svg
               v-else-if="toast.type === 'warning'"
-              class="toast-icon text-amber-600"
+              class="toast-icon toast-icon--warning"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -38,7 +38,7 @@
             </svg>
             <svg
               v-else
-              class="toast-icon text-sky-600"
+              class="toast-icon toast-icon--info"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -105,42 +105,28 @@ const toastClass = (type: string) => {
   border-radius: 18px;
   background: hsl(var(--card) / 0.98);
   padding: 14px 14px 14px 12px;
-  box-shadow:
-    0 12px 30px rgba(15, 23, 42, 0.08),
-    0 3px 10px rgba(15, 23, 42, 0.05);
+  box-shadow: var(--shadow-toast);
   backdrop-filter: blur(10px);
 }
 
 .toast-card--success {
-  border-color: rgba(16, 185, 129, 0.28);
-  background: linear-gradient(180deg, rgba(16, 185, 129, 0.08), rgba(255, 255, 255, 0.985));
-  box-shadow:
-    0 12px 30px rgba(16, 185, 129, 0.06),
-    0 3px 10px rgba(15, 23, 42, 0.05);
+  border-color: var(--toast-success-border);
+  background: linear-gradient(180deg, var(--toast-success-bg-top), var(--toast-success-bg-bottom));
 }
 
 .toast-card--error {
-  border-color: rgba(244, 63, 94, 0.28);
-  background: linear-gradient(180deg, rgba(244, 63, 94, 0.085), rgba(255, 255, 255, 0.985));
-  box-shadow:
-    0 12px 30px rgba(244, 63, 94, 0.06),
-    0 3px 10px rgba(15, 23, 42, 0.05);
+  border-color: var(--toast-error-border);
+  background: linear-gradient(180deg, var(--toast-error-bg-top), var(--toast-error-bg-bottom));
 }
 
 .toast-card--warning {
-  border-color: rgba(245, 158, 11, 0.3);
-  background: linear-gradient(180deg, rgba(245, 158, 11, 0.09), rgba(255, 255, 255, 0.985));
-  box-shadow:
-    0 12px 30px rgba(245, 158, 11, 0.06),
-    0 3px 10px rgba(15, 23, 42, 0.05);
+  border-color: var(--toast-warning-border);
+  background: linear-gradient(180deg, var(--toast-warning-bg-top), var(--toast-warning-bg-bottom));
 }
 
 .toast-card--info {
-  border-color: rgba(14, 165, 233, 0.28);
-  background: linear-gradient(180deg, rgba(14, 165, 233, 0.08), rgba(255, 255, 255, 0.985));
-  box-shadow:
-    0 12px 30px rgba(14, 165, 233, 0.06),
-    0 3px 10px rgba(15, 23, 42, 0.05);
+  border-color: var(--toast-info-border);
+  background: linear-gradient(180deg, var(--toast-info-bg-top), var(--toast-info-bg-bottom));
 }
 
 .toast-icon-wrap {
@@ -157,6 +143,22 @@ const toastClass = (type: string) => {
 .toast-icon {
   width: 16px;
   height: 16px;
+}
+
+.toast-icon--success {
+  color: hsl(var(--tone-success-strong));
+}
+
+.toast-icon--error {
+  color: hsl(var(--tone-error-strong));
+}
+
+.toast-icon--warning {
+  color: hsl(var(--tone-warning-strong));
+}
+
+.toast-icon--info {
+  color: hsl(var(--tone-info-strong));
 }
 
 .toast-body {

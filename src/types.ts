@@ -38,3 +38,9 @@ export type KeyValueItem = {
   badge?: string
   badgeClass?: string
 }
+
+export type StatCardIconTone = 'neutral' | 'success' | 'warning' | 'error' | 'info'
+export type ButtonSize = 'xs' | 'sm' | 'md'
+export type ButtonVariant = 'outline' | 'primary' | 'danger'
+
+export type { UiSize, UiTone, UiVariant, UiSurfaceVariant } from './presets'

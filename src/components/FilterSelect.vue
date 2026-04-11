@@ -7,6 +7,7 @@
       :placeholder="placeholder"
       :placement="placement"
       variant="toolbar"
+      :size="size"
       :selected-indicator="selectedIndicator"
       :selected-indicator-text="selectedIndicatorText"
       :selected-count-text="selectedCountText"
@@ -27,6 +28,7 @@ withDefaults(defineProps<{
   multiple?: boolean
   placeholder?: string
   placement?: 'up' | 'down'
+  size?: 'sm' | 'md'
   selectedIndicator?: 'check' | 'text' | 'none'
   selectedIndicatorText?: string
   selectedCountText?: string
@@ -36,6 +38,7 @@ withDefaults(defineProps<{
   multiple: false,
   placeholder: '',
   placement: 'down',
+  size: 'sm',
   selectedIndicator: 'none',
   selectedIndicatorText: '',
   selectedCountText: '',

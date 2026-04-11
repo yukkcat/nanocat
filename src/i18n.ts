@@ -7,9 +7,11 @@ export type NanocatLocale = {
   selectMenuPlaceholder: string
   selectMenuSelectedIndicatorText: string
   selectMenuSelectedCountText: string
+  modalCloseText: string
   statusDetailTitle: string
   statusDetailLabel: string
   statusDetailRawErrorLabel: string
+  tableShellEmptyTitle: string
   viewModeListLabel: string
   viewModeCardsLabel: string
 }

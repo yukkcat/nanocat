@@ -3,7 +3,7 @@
     <button
       ref="trigger"
       type="button"
-      class="ui-input-sm flex items-center justify-between gap-2 text-foreground hover:border-primary"
+      class="flex items-center justify-between gap-2 text-foreground hover:border-primary"
       :class="triggerClass"
       :title="currentLabel"
       :aria-label="ariaLabel || currentLabel"
@@ -61,7 +61,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useNanocatLocale } from '../i18n'
 import type { SelectOption } from '../types'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   modelValue: string | string[]
   options: Array<string | SelectOption>
   multiple?: boolean
@@ -70,13 +70,27 @@ const props = defineProps<{
   autoWidth?: boolean
   width?: 'full' | 'trigger'
   variant?: 'default' | 'toolbar'
+  size?: 'sm' | 'md'
   selectedIndicator?: 'check' | 'text' | 'none'
   disabled?: boolean
   ariaLabel?: string
   maxVisibleLabels?: number
   selectedIndicatorText?: string
   selectedCountText?: string
-}>()
+}>(), {
+  multiple: false,
+  placement: 'down',
+  autoWidth: false,
+  width: 'full',
+  variant: 'default',
+  size: 'sm',
+  selectedIndicator: undefined,
+  disabled: false,
+  ariaLabel: '',
+  maxVisibleLabels: 3,
+  selectedIndicatorText: '',
+  selectedCountText: '',
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | string[]): void
@@ -98,7 +112,9 @@ const normalizedOptions = computed<SelectOption[]>(() =>
 
 const variant = computed(() => props.variant || 'default')
 const usesTriggerWidth = computed(() => props.width === 'trigger' || props.autoWidth || variant.value === 'toolbar')
+const triggerBaseClass = computed(() => props.size === 'md' ? 'ui-input-md' : 'ui-input-sm')
 const triggerClass = computed(() => [
+  triggerBaseClass.value,
   usesTriggerWidth.value ? 'w-auto min-w-0' : 'w-full',
   props.disabled ? 'cursor-not-allowed opacity-60 hover:border-input hover:text-foreground' : '',
 ])
