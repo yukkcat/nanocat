@@ -1,7 +1,7 @@
 {
   "name": "nanocat-ui",
   "private": false,
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -29,10 +29,10 @@
     "COMPONENTS.md"
   ],
   "scripts": {
-    "playground": "vite --host 127.0.0.1 --port 4173",
+    "playground": "node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 4173",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
-    "build": "npm run clean && vite build && vue-tsc -p tsconfig.build.json",
-    "check": "vue-tsc -p tsconfig.json --noEmit",
+    "build": "npm run clean && node ./node_modules/vite/bin/vite.js build && node ./node_modules/vue-tsc/bin/vue-tsc.js -p tsconfig.build.json",
+    "check": "node ./node_modules/vue-tsc/bin/vue-tsc.js -p tsconfig.json --noEmit",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {

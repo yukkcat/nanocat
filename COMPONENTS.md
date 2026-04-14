@@ -38,6 +38,7 @@ Each section focuses on:
 ## Button
 
 ### Props
+- `tag?: string | object`
 - `type?: "button" | "submit" | "reset"`
 - `size?: "xs" | "sm" | "md"`
 - `variant?: "outline" | "primary" | "danger"`
@@ -55,6 +56,7 @@ Each section focuses on:
 ### Notes
 - Core action button component for primary, outline and danger actions.
 - Prefer this over hand-writing `ui-btn ui-btn-*` combinations.
+- `tag` lets the same button styles render as `a`, `RouterLink`, or another component while keeping one visual source of truth.
 
 ---
 

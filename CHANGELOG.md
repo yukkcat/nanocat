@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.1.5 - 2026-04-13
+
+### Added
+- `Button` now supports `tag`, so the same component can render as `button`, `a`, `RouterLink`, or another host component without losing Nanocat styling
+
+### Improved
+- package scripts now call local `vite` and `vue-tsc` binaries explicitly for more reliable Windows builds and publish checks
+
+### Verified
+- `npm run check`
+- `npm run build`
+
 ## v0.1.4 - 2026-04-11
 
 ### Added

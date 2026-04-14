@@ -1,20 +1,26 @@
 <template>
-  <button
-    :type="type"
+  <component
+    :is="tag"
     class="ui-btn"
-    :class="[sizeClass, variantClass, layoutClass, resolvedRootClass]"
-    :disabled="disabled"
+    :class="[sizeClass, variantClass, layoutClass, stateClass, resolvedRootClass]"
+    v-bind="mergedAttrs"
+    @click="handleClick"
   >
     <slot />
-  </button>
+  </component>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useAttrs } from 'vue'
 import { resolveRootClass } from '../presets'
 import type { ButtonSize, ButtonVariant } from '../types'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<{
+  tag?: string | object
   type?: 'button' | 'submit' | 'reset'
   size?: ButtonSize
   variant?: ButtonVariant
@@ -23,6 +29,7 @@ const props = withDefaults(defineProps<{
   block?: boolean
   rootClass?: string
 }>(), {
+  tag: 'button',
   type: 'button',
   size: 'sm',
   variant: 'outline',
@@ -31,6 +38,9 @@ const props = withDefaults(defineProps<{
   block: false,
   rootClass: '',
 })
+
+const attrs = useAttrs()
+const isNativeButton = computed(() => props.tag === 'button')
 
 const sizeClass = computed(() => {
   if (props.iconOnly) {
@@ -53,5 +63,30 @@ const layoutClass = computed(() => [
   props.iconOnly ? 'p-0' : '',
 ])
 
+const stateClass = computed(() => (
+  !isNativeButton.value && props.disabled
+    ? 'pointer-events-none cursor-not-allowed opacity-60'
+    : ''
+))
+
+const componentProps = computed(() => ({
+  type: isNativeButton.value ? props.type : undefined,
+  disabled: isNativeButton.value ? props.disabled : undefined,
+  'aria-disabled': !isNativeButton.value && props.disabled ? 'true' : undefined,
+  tabindex: !isNativeButton.value && props.disabled ? -1 : undefined,
+}))
+
+const mergedAttrs = computed(() => ({
+  ...attrs,
+  ...componentProps.value,
+}))
+
 const resolvedRootClass = computed(() => resolveRootClass(props.rootClass))
+
+function handleClick(event: MouseEvent) {
+  if (!isNativeButton.value && props.disabled) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
 </script>
