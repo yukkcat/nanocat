@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.1.6 - 2026-04-15
+
+### Fixed
+- restored comfortable default spacing, color, and background for shared `ui-chip`, `ui-pill`, and `ui-meta-chip` primitives
+- prevented compact metadata labels from looking squeezed when used for versions, counts, and file sizes
+
+### Verified
+- `npm run check`
+- `npm run build`
+
 ## v0.1.5 - 2026-04-13
 
 ### Added

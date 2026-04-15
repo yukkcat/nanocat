@@ -132,17 +132,17 @@
 }
 
 .ui-pill {
-  @apply inline-flex items-center whitespace-nowrap rounded-full border;
+  @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
   @apply leading-none shadow-[var(--shadow-inset-soft)];
 }
 
 .ui-chip {
-  @apply inline-flex items-center whitespace-nowrap rounded-full border;
+  @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
   @apply leading-none shadow-[var(--shadow-inset-soft)];
 }
 
 .ui-meta-chip {
-  @apply inline-flex items-center whitespace-nowrap rounded-full border;
+  @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
   @apply leading-none shadow-[var(--shadow-inset-soft)];
 }
 
