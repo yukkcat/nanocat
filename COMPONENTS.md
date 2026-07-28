@@ -18,11 +18,16 @@ Each section focuses on:
 - `items: ActionMenuItem[]`
 - `disabled?: boolean`
 - `align?: "left" | "right"`
-- `size?: "sm" | "md"`
+- `placement?: MenuPlacement` (default: `"auto"`)
+- `size?: "xs" | "sm"`
+- `triggerVariant?: "button" | "input"`
 - `triggerClass?: string`
 - `buttonClass?: string`
 - `contentClass?: string`
 - `menuClass?: string`
+- `menuMinWidth?: number`
+- `triggerMinWidth?: number`
+- `triggerWidth?: number`
 
 ### Emits
 - `select`
@@ -32,6 +37,7 @@ Each section focuses on:
 
 ### Notes
 - Best for compact action dropdowns in toolbars, cards and table rows.
+- Supports headings, active items, nested action groups, keyboard navigation, viewport-safe positioning, and one active floating surface at a time.
 
 ---
 
@@ -107,6 +113,8 @@ Each section focuses on:
 ### Props
 - `modelValue: boolean`
 - `disabled?: boolean`
+- `indeterminate?: boolean`
+- `ariaLabel?: string`
 
 ### Emits
 - `update:modelValue`
@@ -115,7 +123,26 @@ Each section focuses on:
 - `default`
 
 ### Notes
-- Lightweight checkbox with label slot support.
+- Uses semantic primary tokens for selected and partial states, so the check mark or partial indicator remains visible in both light and dark themes. Includes a keyboard-visible focus ring. `indeterminate` maps to the native checkbox's mixed state and exposes `aria-checked="mixed"`.
+
+---
+
+## Skeleton
+
+### Props
+- `width?: string` (default: `"100%"`)
+- `height?: string` (default: `"1rem"`)
+- `rounded?: "sm" | "md" | "lg" | "full"`
+- `animate?: boolean` (default: `true`)
+
+### Emits
+- none
+
+### Slots
+- none
+
+### Notes
+- Neutral loading placeholder. It uses the active theme's muted token and disables motion when the operating system requests reduced motion.
 
 ---
 
@@ -163,6 +190,9 @@ Each section focuses on:
 - `message: string`
 - `confirmText: string`
 - `cancelText: string`
+- `zIndex?: number` (default: `300`)
+- `closeOnOverlay?: boolean` (default: `true`)
+- `closeOnEscape?: boolean` (defaults to `closeOnOverlay`)
 
 ### Emits
 - `confirm`
@@ -172,7 +202,7 @@ Each section focuses on:
 - none
 
 ### Notes
-- Simple confirmation dialog for destructive or important actions.
+- Simple confirmation dialog for destructive or important actions. It layers above standard modals by default. Set `closeOnOverlay` or `closeOnEscape` to `false` when the decision must be explicit; enabled dismissal emits `cancel`.
 
 ---
 
@@ -222,7 +252,7 @@ Each section focuses on:
 - `options: Array<string | SelectOption>`
 - `multiple?: boolean`
 - `placeholder?: string`
-- `placement?: "up" | "down"`
+- `placement?: MenuPlacement` (default: `"down"`)
 - `size?: "sm" | "md"`
 - `selectedIndicator?: "check" | "text" | "none"`
 - `selectedIndicatorText?: string`
@@ -285,6 +315,40 @@ Each section focuses on:
 
 ---
 
+## GroupedSelectMenu
+
+### Props
+- `modelValue: string | string[]`
+- `groups?: GroupedSelectGroup[]`
+- `options?: GroupedSelectOption[]`
+- `multiple?: boolean`
+- `placeholder?: string`
+- `disabled?: boolean`
+- `ariaLabel?: string`
+- `maxVisibleLabels?: number`
+- `selectedCountText?: string`
+- `selectedIndicator?: "check" | "none"`
+- `showGroupLabels?: boolean`
+- `groupLabelAlign?: "left" | "center" | "right"`
+- `placement?: MenuPlacement` (default: `"auto"`)
+- `block?: boolean`
+
+### Emits
+- `update:modelValue`
+
+### Slots
+- none
+
+### Notes
+- Dropdown select for grouped filters.
+- Group labels render as a small caption with a horizontal divider line.
+- `showGroupLabels` can hide captions; `groupLabelAlign` controls whether captions sit left, centered, or right.
+- Supports multi-select without checkbox boxes; selected items use a compact check indicator.
+- Menu density follows `SelectMenu`: shared floating-panel padding/radius, 4px item gap, rounded-md item hover/selected state. Arrow keys, Home/End, Escape, click-outside, and viewport changes are handled by the shared floating-panel runtime.
+- Supports the same keyboard navigation and viewport-safe positioning as `SelectMenu`.
+
+---
+
 ## HelpTip
 
 ### Props
@@ -306,6 +370,7 @@ Each section focuses on:
 ### Props
 - `cardClass?: string`
 - `offset?: number`
+- `focusable?: boolean`
 
 ### Emits
 - none
@@ -315,7 +380,7 @@ Each section focuses on:
 - `content`
 
 ### Notes
-- Floating content card with automatic top/bottom placement.
+- Floating content card with automatic top/bottom placement. Set `focusable` when the trigger needs keyboard access; Enter and Space toggle the card, Escape closes it.
 
 ---
 
@@ -325,7 +390,10 @@ Each section focuses on:
 - `modelValue?: string | number`
 - `type?: "text" | "password" | "email" | "url" | "search" | "number"`
 - `placeholder?: string`
-- `size?: "sm" | "md"`
+- `size?: "xs" | "sm" | "md"`
+- `radius?: "pill" | "rounded"`
+- `bordered?: boolean`
+- `strong?: boolean`
 - `disabled?: boolean`
 - `readonly?: boolean`
 - `block?: boolean`
@@ -368,7 +436,10 @@ Each section focuses on:
 ### Props
 - `tone?: "neutral" | "success" | "warning" | "error" | "info"`
 - `variant?: "soft" | "outline" | "solid"`
-- `size?: "sm" | "md"`
+- `size?: "xs" | "sm" | "md"`
+- `radius?: "pill" | "rounded"`
+- `bordered?: boolean` (default: `true`)
+- `strong?: boolean` (default: `false`)
 - `toneClass?: string`
 - `chipClass?: string`
 
@@ -380,6 +451,7 @@ Each section focuses on:
 
 ### Notes
 - Small metadata chip for labels and compact inline status markers.
+- Use `size="xs"` for dense table metadata, `radius="rounded"` for non-pill labels, and `strong` only when the value needs emphasis. `bordered` can remove the tone border without changing the fill.
 
 ---
 
@@ -399,6 +471,13 @@ Each section focuses on:
 - `closeText?: string`
 - `showClose?: boolean`
 - `closeOnOverlay?: boolean`
+- `closeOnEscape?: boolean`
+- `ariaLabel?: string`
+- `bare?: boolean`
+- `maxWidth?: string`
+- `zIndex?: number`
+- `align?: "center" | "start"`
+- `placement?: "center" | "end"`
 
 ### Emits
 - `close`
@@ -411,6 +490,15 @@ Each section focuses on:
 ### Notes
 - General-purpose modal wrapper with optional header and footer slots.
 - `closeText` falls back to global locale (`setNanocatLocale`).
+- Opening a modal locks page scrolling, moves focus into the dialog, and keeps
+  `Tab` focus inside it. Closing restores focus to the element that opened it.
+- `Escape` follows `closeOnOverlay` unless `closeOnEscape` is explicitly set.
+- Provide `title` or `ariaLabel`. `title` automatically wires the dialog name
+  and `description` automatically wires the dialog description.
+- In the default layout, the panel is bounded to the viewport and its body scrolls independently when content is taller than the available space.
+- `bare` preserves the consumer-owned body layout while retaining overlay, focus, stacking, and scroll-lock behavior. It does not impose the standard flex/max-height panel layout.
+- Use `zIndex` to define intentional layers (for example, confirmations at `300` above regular dialogs at `120`). The runtime resolves the active top modal by layer and then opening order, so nested dialogs keep focus and Escape behavior predictable.
+- `bare` is appropriate for drawers, import surfaces, and other layouts that own their scrolling; the consumer must provide the content overflow behavior in that slot.
 
 ---
 
@@ -421,7 +509,9 @@ Each section focuses on:
 - `description?: string`
 - `tone?: "neutral" | "success" | "warning" | "error" | "info"`
 - `variant?: "soft" | "outline"`
-- `size?: "sm" | "md"`
+- `size?: "xs" | "sm" | "md"`
+- `radius?: "pill" | "rounded"`
+- `bordered?: boolean`
 - `rootClass?: string`
 
 ### Emits
@@ -442,6 +532,7 @@ Each section focuses on:
 - `modelValue: SegmentedValue`
 - `options: SegmentedOption[]`
 - `ariaLabel?: string`
+- `fit?: "content" | "stretch"` (default: `"content"`)
 
 ### Emits
 - `update:modelValue`
@@ -451,6 +542,7 @@ Each section focuses on:
 
 ### Notes
 - Segmented switch for compact tabs and state toggles.
+- `content` keeps labels at their natural width; `stretch` fills the parent. Overflow scrolls horizontally instead of wrapping controls onto a second line.
 
 ---
 
@@ -461,7 +553,7 @@ Each section focuses on:
 - `options: Array<string | SelectOption>`
 - `multiple?: boolean`
 - `placeholder?: string`
-- `placement?: "up" | "down"`
+- `placement?: MenuPlacement` (default: `"down"`)
 - `autoWidth?: boolean`
 - `width?: "full" | "trigger"`
 - `variant?: "default" | "toolbar"`
@@ -482,6 +574,7 @@ Each section focuses on:
 - Core selection dropdown for forms and filters.
 - Prefer `variant="toolbar"` instead of relying on `autoWidth` directly.
 - Placeholder and selected text fall back to global locale.
+- `MenuPlacement` accepts `"up"`, `"down"`, `"top"`, `"bottom"`, `"left"`, `"right"`, and `"auto"`.
 
 ---
 
@@ -517,7 +610,9 @@ Each section focuses on:
 - `label: string`
 - `tone?: "neutral" | "success" | "warning" | "error" | "info"`
 - `variant?: "soft" | "outline" | "solid"`
-- `size?: "sm" | "md"`
+- `size?: "xs" | "sm" | "md"`
+- `radius?: "pill" | "rounded"`
+- `bordered?: boolean` (default: `true`)
 - `toneClass?: string`
 - `title?: string`
 - `detailLabel?: string`
@@ -534,6 +629,7 @@ Each section focuses on:
 
 ### Notes
 - Extended status chip with extra detail and raw error support.
+- Use `size="xs"` and `radius="rounded"` for dense diagnostics tables; `bordered` controls the tone border independently from the fill.
 - `title`, `detailLabel`, and `rawErrorLabel` fall back to global locale.
 
 ---
@@ -544,7 +640,9 @@ Each section focuses on:
 - `label: string`
 - `tone?: "neutral" | "success" | "warning" | "error" | "info"`
 - `variant?: "soft" | "outline" | "solid"`
-- `size?: "sm" | "md"`
+- `size?: "xs" | "sm" | "md"`
+- `radius?: "pill" | "rounded"`
+- `bordered?: boolean`
 - `toneClass?: string`
 - `title?: string`
 - `detail?: string`
@@ -558,7 +656,7 @@ Each section focuses on:
 - `content`
 
 ### Notes
-- Status chip with hover content support.
+- Status chip with hover content support. A hover card is only created when a title, detail, or `content` slot is present.
 
 ---
 

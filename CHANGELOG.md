@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.1.7 - 2026-07-28
+
+### Added
+- shared `GroupedSelectMenu` and floating-panel keyboard/viewport positioning primitives
+- first-level submenus, headings, active states, and input-style triggers for `ActionMenu`
+- `Skeleton` and expanded examples for menus, tags, dialogs, and bare modals in the Playground
+
+### Improved
+- unified dropdown spacing, selection indicators, placement, and exclusive open behavior
+- unified `MetaChip`, `StatusPill`, and `StatusDetailPill` tone, size, radius, and border controls
+- added modal focus trapping, scroll locking, intentional z-index layering, and configurable overlay/Escape closing
+- fixed checkbox selected and indeterminate colors through theme tokens, including dark mode
+- expanded component contracts and usage documentation
+
+### Verified
+- `npm run check`
+- `npm run build`
+
 ## v0.1.6 - 2026-04-15
 
 ### Fixed

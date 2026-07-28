@@ -1,6 +1,6 @@
 <template>
-  <HoverCard :card-class="cardClass">
-    <span class="ui-pill" :class="['gap-1.5', toneClasses, sizeClasses.text, sizeClasses.pill, toneClass, pillClass]">
+  <HoverCard v-if="hasDetails" :card-class="cardClass" focusable>
+    <span class="ui-pill" :class="pillClasses">
       {{ label }}
     </span>
     <template #content>
@@ -12,19 +12,25 @@
       </slot>
     </template>
   </HoverCard>
+  <span v-else class="ui-pill" :class="pillClasses">
+    {{ label }}
+  </span>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { getSizeClasses, getToneClasses } from '../presets'
+import { computed, useSlots } from 'vue'
+import { getChipRadiusClass, getChipSizeClasses, getToneClasses } from '../presets'
 import HoverCard from './HoverCard.vue'
+import type { ChipRadius, ChipSize } from '../types'
 
 const props = withDefaults(
   defineProps<{
     label: string
     tone?: 'neutral' | 'success' | 'warning' | 'error' | 'info'
     variant?: 'soft' | 'outline' | 'solid'
-    size?: 'sm' | 'md'
+    size?: ChipSize
+    radius?: ChipRadius
+    bordered?: boolean
     toneClass?: string
     title?: string
     detail?: string
@@ -35,6 +41,8 @@ const props = withDefaults(
     tone: 'neutral',
     variant: 'soft',
     size: 'sm',
+    radius: 'pill',
+    bordered: true,
     toneClass: '',
     title: '',
     detail: '',
@@ -44,5 +52,18 @@ const props = withDefaults(
 )
 
 const toneClasses = computed(() => getToneClasses(props.tone, props.variant))
-const sizeClasses = computed(() => getSizeClasses(props.size))
+const sizeClasses = computed(() => getChipSizeClasses(props.size))
+const radiusClass = computed(() => getChipRadiusClass(props.radius))
+const slots = useSlots()
+const hasDetails = computed(() => Boolean(props.title || props.detail || slots.content))
+const pillClasses = computed(() => [
+  'gap-1.5',
+  toneClasses.value,
+  sizeClasses.value.text,
+  sizeClasses.value.pill,
+  radiusClass.value,
+  props.bordered ? '' : '!border-transparent',
+  props.toneClass,
+  props.pillClass,
+])
 </script>

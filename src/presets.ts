@@ -2,6 +2,8 @@ export type UiSize = 'sm' | 'md'
 export type UiTone = 'neutral' | 'success' | 'warning' | 'error' | 'info'
 export type UiVariant = 'soft' | 'outline' | 'solid'
 export type UiSurfaceVariant = Extract<UiVariant, 'soft' | 'outline'>
+export type ChipSize = 'xs' | UiSize
+export type ChipRadius = 'pill' | 'rounded'
 
 const toneClassMap: Record<UiTone, Record<UiVariant, string>> = {
   neutral: {
@@ -10,24 +12,24 @@ const toneClassMap: Record<UiTone, Record<UiVariant, string>> = {
     solid: 'border-foreground/10 bg-foreground text-background',
   },
   success: {
-    soft: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700',
-    outline: 'border-emerald-500/35 bg-emerald-500/[0.03] text-emerald-700',
-    solid: 'border-emerald-500/20 bg-emerald-500 text-white',
+    soft: 'border-[hsl(var(--tone-success-border)/0.9)] bg-[hsl(var(--tone-success-bg)/0.8)] text-[hsl(var(--tone-success-foreground))]',
+    outline: 'border-[hsl(var(--tone-success-border))] bg-transparent text-[hsl(var(--tone-success-strong))]',
+    solid: 'border-[hsl(var(--tone-success-strong)/0.25)] bg-[hsl(var(--tone-success-strong))] text-primary-foreground',
   },
   warning: {
-    soft: 'border-amber-500/22 bg-amber-500/10 text-amber-700',
-    outline: 'border-amber-500/35 bg-amber-500/[0.03] text-amber-700',
-    solid: 'border-amber-500/20 bg-amber-500 text-white',
+    soft: 'border-[hsl(var(--tone-warning-border)/0.9)] bg-[hsl(var(--tone-warning-bg)/0.8)] text-[hsl(var(--tone-warning-foreground))]',
+    outline: 'border-[hsl(var(--tone-warning-border))] bg-transparent text-[hsl(var(--tone-warning-strong))]',
+    solid: 'border-[hsl(var(--tone-warning-strong)/0.25)] bg-[hsl(var(--tone-warning-strong))] text-primary-foreground',
   },
   error: {
-    soft: 'border-rose-500/20 bg-rose-500/10 text-rose-700',
-    outline: 'border-rose-500/35 bg-rose-500/[0.03] text-rose-700',
-    solid: 'border-rose-500/20 bg-rose-500 text-white',
+    soft: 'border-[hsl(var(--tone-error-border)/0.9)] bg-[hsl(var(--tone-error-bg)/0.8)] text-[hsl(var(--tone-error-foreground))]',
+    outline: 'border-[hsl(var(--tone-error-border))] bg-transparent text-[hsl(var(--tone-error-strong))]',
+    solid: 'border-[hsl(var(--tone-error-strong)/0.25)] bg-[hsl(var(--tone-error-strong))] text-primary-foreground',
   },
   info: {
-    soft: 'border-sky-500/20 bg-sky-500/10 text-sky-700',
-    outline: 'border-sky-500/35 bg-sky-500/[0.03] text-sky-700',
-    solid: 'border-sky-500/20 bg-sky-500 text-white',
+    soft: 'border-[hsl(var(--tone-info-border)/0.9)] bg-[hsl(var(--tone-info-bg)/0.8)] text-[hsl(var(--tone-info-foreground))]',
+    outline: 'border-[hsl(var(--tone-info-border))] bg-transparent text-[hsl(var(--tone-info-strong))]',
+    solid: 'border-[hsl(var(--tone-info-strong)/0.25)] bg-[hsl(var(--tone-info-strong))] text-primary-foreground',
   },
 }
 
@@ -72,6 +74,36 @@ export function getToneClasses(tone: UiTone = 'neutral', variant: UiVariant = 's
 
 export function getSizeClasses(size: UiSize = 'sm') {
   return sizeClassMap[size]
+}
+
+const chipSizeClassMap: Record<ChipSize, {
+  text: string
+  chip: string
+  pill: string
+}> = {
+  xs: {
+    text: '!text-[11px]',
+    chip: '!min-h-6 !px-2.5 !py-1',
+    pill: '!min-h-6 !px-2.5 !py-1',
+  },
+  sm: {
+    text: '!text-[11px]',
+    chip: '!min-h-[1.625rem] !px-3 !py-1.5',
+    pill: '!min-h-[1.625rem] !px-3 !py-1.5',
+  },
+  md: {
+    text: '!text-xs',
+    chip: '!min-h-8 !px-3.5 !py-2',
+    pill: '!min-h-8 !px-3.5 !py-2',
+  },
+}
+
+export function getChipSizeClasses(size: ChipSize = 'sm') {
+  return chipSizeClassMap[size]
+}
+
+export function getChipRadiusClass(radius: ChipRadius = 'pill') {
+  return radius === 'rounded' ? '!rounded-md' : ''
 }
 
 const stateToneClassMap: Record<Exclude<UiTone, 'info'> | 'info', Record<UiSurfaceVariant, {

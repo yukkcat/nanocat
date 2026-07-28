@@ -4,7 +4,12 @@ export type ActionMenuItem = {
   danger?: boolean
   disabled?: boolean
   dividerBefore?: boolean
+  active?: boolean
+  heading?: boolean
+  children?: ActionMenuItem[]
 }
+
+export type MenuPlacement = 'auto' | 'top' | 'bottom' | 'left' | 'right' | 'up' | 'down'
 
 export type SelectOption = {
   label: string
@@ -12,7 +17,16 @@ export type SelectOption = {
   disabled?: boolean
 }
 
+export type GroupedSelectOption = SelectOption
+
+export type GroupedSelectGroup = {
+  label?: string
+  options: GroupedSelectOption[]
+}
+
 export type SegmentedValue = string | number
+
+export type SegmentedFit = 'content' | 'stretch'
 
 export type SegmentedOption = {
   label: string
@@ -43,4 +57,4 @@ export type StatCardIconTone = 'neutral' | 'success' | 'warning' | 'error' | 'in
 export type ButtonSize = 'xs' | 'sm' | 'md'
 export type ButtonVariant = 'outline' | 'primary' | 'danger'
 
-export type { UiSize, UiTone, UiVariant, UiSurfaceVariant } from './presets'
+export type { ChipRadius, ChipSize, UiSize, UiTone, UiVariant, UiSurfaceVariant } from './presets'

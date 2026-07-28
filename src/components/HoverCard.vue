@@ -2,11 +2,16 @@
   <span
     ref="triggerRef"
     class="inline-flex cursor-pointer"
+    :tabindex="focusable ? 0 : undefined"
+    :aria-describedby="visible ? cardId : undefined"
     @mouseenter="showTooltip"
     @mouseleave="hideTooltip"
     @focusin="showTooltip"
     @focusout="hideTooltip"
     @click="toggleTooltip"
+    @keydown.enter.prevent="toggleTooltip"
+    @keydown.space.prevent="toggleTooltip"
+    @keydown.escape="hideImmediately"
   >
     <slot />
   </span>
@@ -21,6 +26,7 @@
     >
       <div
         v-if="visible"
+        :id="cardId"
         ref="cardRef"
         class="ui-floating-panel fixed z-[9999] !rounded-lg !p-3"
         :class="cardClass"
@@ -45,21 +51,24 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
     cardClass?: string
     offset?: number
+    focusable?: boolean
   }>(),
   {
     cardClass: 'w-64',
     offset: 8,
+    focusable: false,
   }
 )
 
 const triggerRef = ref<HTMLElement | null>(null)
 const cardRef = ref<HTMLElement | null>(null)
+const cardId = `nanocat-hover-card-${useId()}`
 const visible = ref(false)
 const placement = ref<'top' | 'bottom'>('top')
 const tooltipStyle = ref<Record<string, string>>({})
@@ -151,6 +160,14 @@ const hideTooltip = () => {
   hideTimeout = setTimeout(() => {
     visible.value = false
   }, 150)
+}
+
+const hideImmediately = () => {
+  if (hideTimeout) {
+    clearTimeout(hideTimeout)
+    hideTimeout = null
+  }
+  visible.value = false
 }
 
 const handleTooltipEnter = () => {

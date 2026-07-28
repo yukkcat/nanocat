@@ -4,6 +4,8 @@
     :tone="tone"
     :variant="variant"
     :size="size"
+    :radius="radius"
+    :bordered="bordered"
     :tone-class="toneClass"
     :title="title"
     :card-class="cardClass"
@@ -12,7 +14,7 @@
       <div class="space-y-2 text-xs leading-5">
         <div>
           <div class="ui-status-title mb-1">{{ detailLabel }}</div>
-          <div class="ui-status-body">{{ detail }}</div>
+          <div class="ui-status-body whitespace-pre-line">{{ detail }}</div>
         </div>
         <div v-if="rawError">
           <div class="ui-status-title mb-1">{{ rawErrorLabel }}</div>
@@ -29,12 +31,15 @@
 import { computed, toRefs } from 'vue'
 import { useNanocatLocale } from '../i18n'
 import StatusPill from './StatusPill.vue'
+import type { ChipRadius, ChipSize } from '../types'
 
 const props = withDefaults(defineProps<{
   label: string
   tone?: 'neutral' | 'success' | 'warning' | 'error' | 'info'
   variant?: 'soft' | 'outline' | 'solid'
-  size?: 'sm' | 'md'
+  size?: ChipSize
+  radius?: ChipRadius
+  bordered?: boolean
   toneClass?: string
   title?: string
   detailLabel?: string
@@ -46,6 +51,8 @@ const props = withDefaults(defineProps<{
   tone: 'neutral',
   variant: 'soft',
   size: 'sm',
+  radius: 'pill',
+  bordered: true,
   toneClass: '',
   title: '',
   detailLabel: '',
@@ -54,7 +61,7 @@ const props = withDefaults(defineProps<{
   cardClass: 'w-72',
 })
 
-const { label, tone, variant, size, toneClass, detail, rawError, cardClass } = toRefs(props)
+const { label, tone, variant, size, radius, bordered, toneClass, detail, rawError, cardClass } = toRefs(props)
 const locale = useNanocatLocale()
 const title = computed(() => props.title || locale.statusDetailTitle)
 const detailLabel = computed(() => props.detailLabel || locale.statusDetailLabel)

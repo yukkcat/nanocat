@@ -198,16 +198,32 @@
 }
 
 .ui-segmented {
-  @apply flex items-center gap-1 rounded-full border border-border bg-muted/30 p-1;
+  @apply flex max-w-full flex-nowrap items-center gap-1 overflow-x-auto rounded-lg border border-border bg-muted/30 p-1;
+}
+
+.ui-segmented--content {
+  @apply w-max;
+}
+
+.ui-segmented--stretch {
+  @apply w-full;
 }
 
 .ui-segmented-btn {
-  @apply inline-flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[11px] font-medium text-muted-foreground transition-all;
+  @apply inline-flex min-h-8 items-center gap-1.5 whitespace-nowrap rounded-md border border-transparent px-3 py-1.5 text-xs font-medium leading-none text-muted-foreground transition-all;
   @apply hover:bg-accent/50 hover:text-foreground;
 }
 
+.ui-segmented--content .ui-segmented-btn {
+  @apply flex-none;
+}
+
+.ui-segmented--stretch .ui-segmented-btn {
+  @apply flex-1 justify-center;
+}
+
 .ui-segmented-btn-active {
-  @apply border-border bg-accent/50 font-medium text-foreground;
+  @apply border-border bg-card font-medium text-foreground shadow-sm;
 }
 
 .ui-segmented-count {
@@ -285,6 +301,10 @@
   @apply rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-floating)];
 }
 
+.ui-menu-panel {
+  @apply overflow-x-hidden overflow-y-auto overscroll-contain rounded-lg;
+}
+
 .ui-overlay-backdrop {
   background: var(--overlay-backdrop);
 }
@@ -319,11 +339,20 @@
 }
 
 .ui-menu-item {
-  @apply flex h-8 w-full items-center justify-between rounded-full px-3 text-left text-xs transition-colors;
-  @apply hover:bg-accent hover:text-foreground;
+  @apply flex h-8 min-w-0 w-full items-center justify-between gap-2 overflow-hidden rounded-md px-3 text-left text-xs transition-colors;
+  @apply hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card;
+  @apply disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 .ui-menu-item-danger {
   @apply text-[hsl(var(--tone-error-foreground))];
   @apply hover:bg-[hsl(var(--tone-error-bg)/0.7)] hover:text-[hsl(var(--tone-error-strong))];
+}
+
+.ui-menu-item-active {
+  @apply bg-accent text-accent-foreground;
+}
+
+.ui-menu-heading {
+  @apply flex min-h-[1.35rem] items-center px-2 text-[11px] font-medium leading-none text-muted-foreground/70;
 }

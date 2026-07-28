@@ -8,6 +8,9 @@
     body-class="px-5 pt-3 pb-5"
     footer-class="border-t-0 pt-0"
     :show-close="false"
+    :z-index="zIndex"
+    :close-on-overlay="closeOnOverlay"
+    :close-on-escape="closeOnEscape"
     @close="$emit('cancel')"
   >
     <p class="ui-dialog-body">{{ message }}</p>
@@ -37,13 +40,19 @@
 import Button from './Button.vue'
 import ModalShell from './ModalShell.vue'
 
-defineProps<{
+withDefaults(defineProps<{
   open: boolean
   title: string
   message: string
   confirmText: string
   cancelText: string
-}>()
+  zIndex?: number
+  closeOnOverlay?: boolean
+  closeOnEscape?: boolean
+}>(), {
+  zIndex: 300,
+  closeOnOverlay: true,
+})
 
 defineEmits<{
   (e: 'confirm'): void

@@ -20,14 +20,14 @@
 
 <script setup lang="ts">
 import SelectMenu from './SelectMenu.vue'
-import type { SelectOption } from '../types'
+import type { MenuPlacement, SelectOption } from '../types'
 
 withDefaults(defineProps<{
   modelValue: string | string[]
   options: Array<string | SelectOption>
   multiple?: boolean
   placeholder?: string
-  placement?: 'up' | 'down'
+  placement?: MenuPlacement
   size?: 'sm' | 'md'
   selectedIndicator?: 'check' | 'text' | 'none'
   selectedIndicatorText?: string

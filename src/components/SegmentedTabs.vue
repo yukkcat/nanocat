@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-segmented" :aria-label="ariaLabel">
+  <div class="ui-segmented" :class="`ui-segmented--${fit}`" :aria-label="ariaLabel">
     <button
       v-for="option in options"
       :key="String(option.value)"
@@ -18,13 +18,16 @@
 </template>
 
 <script setup lang="ts">
-import type { SegmentedOption, SegmentedValue } from '../types'
+import type { SegmentedFit, SegmentedOption, SegmentedValue } from '../types'
 
-defineProps<{
+withDefaults(defineProps<{
   modelValue: SegmentedValue
   options: SegmentedOption[]
   ariaLabel?: string
-}>()
+  fit?: SegmentedFit
+}>(), {
+  fit: 'content',
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: SegmentedValue): void

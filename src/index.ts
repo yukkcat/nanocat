@@ -14,6 +14,7 @@ export { default as FieldGrid } from './components/FieldGrid.vue'
 export { default as FilterSelect } from './components/FilterSelect.vue'
 export { default as FormField } from './components/FormField.vue'
 export { default as FormSection } from './components/FormSection.vue'
+export { default as GroupedSelectMenu } from './components/GroupedSelectMenu.vue'
 export { default as HelpTip } from './components/HelpTip.vue'
 export { default as HoverCard } from './components/HoverCard.vue'
 export { default as Input } from './components/Input.vue'
@@ -23,6 +24,7 @@ export { default as ModalShell } from './components/ModalShell.vue'
 export { default as ResultState } from './components/ResultState.vue'
 export { default as SegmentedTabs } from './components/SegmentedTabs.vue'
 export { default as SelectMenu } from './components/SelectMenu.vue'
+export { default as Skeleton } from './components/Skeleton.vue'
 export { default as StatusDetailPill } from './components/StatusDetailPill.vue'
 export { default as StatCard } from './components/StatCard.vue'
 export { default as StatusPill } from './components/StatusPill.vue'
@@ -42,5 +44,18 @@ export {
 } from './i18n'
 
 export type { NanocatLocale } from './i18n'
-export type { ActionMenuItem, ButtonSize, ButtonVariant, KeyValueItem, SegmentedOption, SegmentedValue, SelectOption, ToastItem } from './types'
-export type { UiSize, UiTone, UiVariant, UiSurfaceVariant } from './types'
+export type {
+  ActionMenuItem,
+  ButtonSize,
+  ButtonVariant,
+  GroupedSelectGroup,
+  GroupedSelectOption,
+  KeyValueItem,
+  MenuPlacement,
+  SegmentedFit,
+  SegmentedOption,
+  SegmentedValue,
+  SelectOption,
+  ToastItem,
+} from './types'
+export type { ChipRadius, ChipSize, UiSize, UiTone, UiVariant, UiSurfaceVariant } from './types'

@@ -122,8 +122,10 @@ const options = [
 ### Form / select
 - Input
 - Checkbox
+- Skeleton
 - SelectMenu
 - FilterSelect
+- GroupedSelectMenu
 - FormField
 - FormSection
 - FieldGrid
