@@ -214,7 +214,10 @@
 
 .ui-segmented-btn {
   @apply inline-flex min-h-8 items-center gap-1.5 whitespace-nowrap rounded-md border border-transparent px-3 py-1.5 text-xs font-medium leading-none text-muted-foreground transition-all;
-  @apply hover:bg-accent/50 hover:text-foreground;
+}
+
+.ui-segmented-btn:not(.ui-segmented-btn-active):hover {
+  @apply bg-accent/50 text-foreground;
 }
 
 .ui-segmented--content .ui-segmented-btn {
