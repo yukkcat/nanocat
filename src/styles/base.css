@@ -131,19 +131,22 @@
   @apply border-destructive/40 text-destructive hover:border-destructive hover:bg-destructive/5;
 }
 
-.ui-pill {
-  @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
-  @apply leading-none shadow-[var(--shadow-inset-soft)];
-}
+@layer components {
+  /* Tone utility classes must remain later than these neutral defaults. */
+  .ui-pill {
+    @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
+    @apply leading-none shadow-[var(--shadow-inset-soft)];
+  }
 
-.ui-chip {
-  @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
-  @apply leading-none shadow-[var(--shadow-inset-soft)];
-}
+  .ui-chip {
+    @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
+    @apply leading-none shadow-[var(--shadow-inset-soft)];
+  }
 
-.ui-meta-chip {
-  @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
-  @apply leading-none shadow-[var(--shadow-inset-soft)];
+  .ui-meta-chip {
+    @apply inline-flex items-center whitespace-nowrap rounded-full border border-border/80 bg-secondary/70 px-2.5 py-1 text-xs font-medium text-muted-foreground;
+    @apply leading-none shadow-[var(--shadow-inset-soft)];
+  }
 }
 
 .ui-badge {
@@ -314,11 +317,43 @@
 }
 
 .ui-tooltip {
-  @apply fixed z-[9999] -translate-x-1/2 -translate-y-full rounded-md bg-foreground px-2 py-1 text-[10px] text-background shadow-[var(--shadow-floating)];
+  @apply fixed z-[9999] rounded-md bg-foreground px-2 py-1 text-[10px] text-background shadow-[var(--shadow-floating)];
+}
+
+.ui-tooltip--top {
+  @apply -translate-x-1/2 -translate-y-full;
+}
+
+.ui-tooltip--right {
+  @apply -translate-y-1/2;
+}
+
+.ui-tooltip--bottom {
+  @apply -translate-x-1/2;
+}
+
+.ui-tooltip--left {
+  @apply -translate-x-full -translate-y-1/2;
 }
 
 .ui-tooltip-arrow {
+  @apply absolute h-0 w-0;
+}
+
+.ui-tooltip-arrow--top {
   @apply absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-foreground;
+}
+
+.ui-tooltip-arrow--right {
+  @apply right-full top-1/2 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-foreground;
+}
+
+.ui-tooltip-arrow--bottom {
+  @apply bottom-full left-1/2 -translate-x-1/2 border-x-4 border-b-4 border-x-transparent border-b-foreground;
+}
+
+.ui-tooltip-arrow--left {
+  @apply left-full top-1/2 -translate-y-1/2 border-y-4 border-l-4 border-y-transparent border-l-foreground;
 }
 
 .ui-help-dot {
