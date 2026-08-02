@@ -330,6 +330,7 @@ Each section focuses on:
 - `selectedIndicator?: "check" | "none"`
 - `showGroupLabels?: boolean`
 - `groupLabelAlign?: "left" | "center" | "right"`
+- `valueAlign?: "left" | "center" | "right"` (default: `"left"`)
 - `placement?: MenuPlacement` (default: `"auto"`)
 - `block?: boolean`
 
@@ -342,7 +343,7 @@ Each section focuses on:
 ### Notes
 - Dropdown select for grouped filters.
 - Group labels render as a small caption with a horizontal divider line.
-- `showGroupLabels` can hide captions; `groupLabelAlign` controls whether captions sit left, centered, or right.
+- `showGroupLabels` can hide captions; `groupLabelAlign` controls whether captions sit left, centered, or right. `valueAlign` controls the selected value in the trigger without changing menu-item alignment.
 - Supports multi-select without checkbox boxes; selected items use a compact check indicator.
 - Menu density follows `SelectMenu`: shared floating-panel padding/radius, 4px item gap, rounded-md item hover/selected state. Arrow keys, Home/End, Escape, click-outside, and viewport changes are handled by the shared floating-panel runtime.
 - Supports the same keyboard navigation and viewport-safe positioning as `SelectMenu`.
@@ -455,6 +456,64 @@ Each section focuses on:
 
 ---
 
+## LoadingState
+
+### Props
+- `title?: string`
+- `description?: string`
+- `compact?: boolean`
+- `align?: "center" | "start"` (default: `"center"`)
+- `flush?: boolean` (default: `false`)
+
+### Emits
+- none
+
+### Slots
+- none
+
+### Notes
+- One stable loading status for pages, tables, dialogs, and operation progress.
+- Use the centered default for initial page, table, and detail loading.
+- Use `align="start"` with `flush` for progress streams that begin at the top of an existing content region.
+
+---
+
+## DrawerShell
+
+### Props
+- `open: boolean`
+- `title?: string`
+- `description?: string`
+- `maxWidth?: string` (default: `"32rem"`)
+- `zIndex?: number`
+- `closeText?: string`
+- `showClose?: boolean`
+- `closeOnOverlay?: boolean`
+- `closeOnEscape?: boolean`
+- `showBackdrop?: boolean` (default: `true`; set `false` for a detached, non-modal operation drawer that leaves the page interactive)
+- `ariaLabel?: string`
+- `bare?: boolean`
+- `rootClass?: string`
+- `overlayClass?: string`
+- `headerClass?: string`
+- `bodyClass?: string`
+- `footerClass?: string`
+
+### Emits
+- `close`
+
+### Slots
+- `default`
+- `header`
+- `footer`
+
+### Notes
+- Right-side, viewport-bounded dialog built on `ModalShell`.
+- Owns responsive height, edge spacing, and one subtle drawer transition. With a backdrop it also owns focus management and scroll locking; detached drawers leave the page interactive.
+- Use `bare` when the application supplies its own header/body/footer layout; the drawer still owns geometry and motion.
+
+---
+
 ## ModalShell
 
 ### Props
@@ -478,6 +537,8 @@ Each section focuses on:
 - `zIndex?: number`
 - `align?: "center" | "start"`
 - `placement?: "center" | "end"`
+- `motion?: "none" | "drawer"` (default: `"none"`)
+- `modal?: boolean` (default: `true`; set `false` only for non-blocking surfaces that must leave the page interactive)
 
 ### Emits
 - `close`
@@ -490,7 +551,7 @@ Each section focuses on:
 ### Notes
 - General-purpose modal wrapper with optional header and footer slots.
 - `closeText` falls back to global locale (`setNanocatLocale`).
-- Opening a modal locks page scrolling, moves focus into the dialog, and keeps
+- Opening a modal shell with `modal=true` locks page scrolling, moves focus into the dialog, and keeps
   `Tab` focus inside it. Closing restores focus to the element that opened it.
 - `Escape` follows `closeOnOverlay` unless `closeOnEscape` is explicitly set.
 - Provide `title` or `ariaLabel`. `title` automatically wires the dialog name
@@ -499,6 +560,7 @@ Each section focuses on:
 - `bare` preserves the consumer-owned body layout while retaining overlay, focus, stacking, and scroll-lock behavior. It does not impose the standard flex/max-height panel layout.
 - Use `zIndex` to define intentional layers (for example, confirmations at `300` above regular dialogs at `120`). The runtime resolves the active top modal by layer and then opening order, so nested dialogs keep focus and Escape behavior predictable.
 - `bare` is appropriate for drawers, import surfaces, and other layouts that own their scrolling; the consumer must provide the content overflow behavior in that slot.
+- Prefer `DrawerShell` over assembling `align="start"`, `placement="end"`, viewport height, and drawer motion at the call site.
 
 ---
 
@@ -560,6 +622,7 @@ Each section focuses on:
 - `selectedIndicator?: "check" | "text" | "none"`
 - `disabled?: boolean`
 - `ariaLabel?: string`
+- `valueAlign?: "left" | "center" | "right"` (default: `"left"`)
 - `maxVisibleLabels?: number`
 - `selectedIndicatorText?: string`
 - `selectedCountText?: string`
@@ -663,29 +726,48 @@ Each section focuses on:
 ## TableShell
 
 ### Props
+- `loading?: boolean`
+- `loadingColspan?: number` (defaults to `emptyColspan`)
+- `loadingTitle?: string`
 - `showEmpty?: boolean`
 - `emptyColspan?: number`
 - `emptyTitle?: string`
 - `emptyDescription?: string`
 - `variant?: "soft" | "outline"`
 - `size?: "sm" | "md"`
+- `fill?: boolean`
+- `stickyHeader?: boolean`
+- `footerBorder?: boolean`
+- `unframed?: boolean`
 - `rootClass?: string`
 - `wrapperClass?: string`
+- `scrollClass?: string`
 - `tableClass?: string`
 - `headClass?: string`
 - `bodyClass?: string`
+- `footerClass?: string`
 
 ### Emits
 - none
 
 ### Slots
+- `colgroup`
 - `head`
+- `loading`
 - `empty`
+- `footer`
 - default row content
 
 ### Notes
-- Scroll-safe table wrapper with built-in empty-state support.
-- `emptyTitle` falls back to global locale (`setNanocatLocale`).
+- Scroll-safe table wrapper with built-in loading and empty states. Loading takes precedence over the empty state and uses a compact status spinner instead of skeleton rows.
+- `fill` makes the shell consume the available height of a constrained flex parent and moves horizontal and vertical scrolling into the table body region.
+- `stickyHeader` keeps the table header visible inside the scroll region. It is normally paired with `fill`.
+- On narrow Chromium/WebKit viewports, the table keeps its horizontal scrollbar and hides the redundant inner vertical thumb.
+- `wrapperClass` remains the 0.1.7 compatibility alias for `rootClass`; when both are set, `rootClass` wins. Use `scrollClass` for scrolling-layer customizations.
+- The `footer` remains outside the scroll region; `footerBorder` adds its top divider.
+- The default empty state is visually integrated into the table without adding a nested surface.
+- Loading and empty content follow the width of the table's scroll container and wrap long text, including when the table itself has a larger minimum width.
+- `loadingTitle` and `emptyTitle` fall back to the global locale (`setNanocatLocale`).
 
 ---
 
@@ -729,6 +811,7 @@ Each section focuses on:
 ### Props
 - `text: string`
 - `offset?: number`
+- `placement?: "top" | "right" | "bottom" | "left"` (default: `"top"`)
 
 ### Emits
 - none
@@ -737,7 +820,7 @@ Each section focuses on:
 - `default`
 
 ### Notes
-- Small floating text tooltip.
+- Small floating text tooltip with opposite-side fallback, viewport clamping, and scroll/resize repositioning.
 
 ---
 

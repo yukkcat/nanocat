@@ -10,6 +10,7 @@ export const nanocatZhCN: NanocatLocale = {
   statusDetailLabel: '\u8bf4\u660e',
   statusDetailRawErrorLabel: '\u539f\u59cb\u62a5\u9519',
   tableShellEmptyTitle: '\u6682\u65e0\u6570\u636e',
+  tableShellLoadingTitle: '\u6b63\u5728\u52a0\u8f7d',
   viewModeListLabel: '\u5217\u8868\u89c6\u56fe',
   viewModeCardsLabel: '\u5361\u7247\u89c6\u56fe',
 }

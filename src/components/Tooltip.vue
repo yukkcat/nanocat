@@ -12,17 +12,23 @@
   <Teleport to="body">
     <div
       v-if="visible"
-      :class="['ui-tooltip', `ui-tooltip--${tooltipPlacement}`]"
-      :style="tooltipStyle"
+      :id="tooltipId"
+      ref="tooltipRef"
+      role="tooltip"
+      :class="['ui-tooltip', `ui-tooltip--${resolvedPlacement}`]"
+      :style="[tooltipStyle, tooltipLayerStyle]"
     >
       {{ text }}
-      <span :class="['ui-tooltip-arrow', `ui-tooltip-arrow--${tooltipPlacement}`]"></span>
+      <span :class="['ui-tooltip-arrow', `ui-tooltip-arrow--${resolvedPlacement}`]"></span>
     </div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, ref, useId } from 'vue'
+import type { CSSProperties } from 'vue'
+import { useAnchoredOverlay } from '../composables/useAnchoredOverlay'
+import { OVERLAY_LAYER } from '../layers'
 
 type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left'
 
@@ -33,50 +39,42 @@ const props = defineProps<{
 }>()
 
 const triggerRef = ref<HTMLElement | null>(null)
+const tooltipRef = ref<HTMLElement | null>(null)
 const visible = ref(false)
-const tooltipStyle = ref<Record<string, string>>({})
+const tooltipLayerStyle = { zIndex: OVERLAY_LAYER.tooltip }
 const tooltipPlacement = computed(() => props.placement ?? 'top')
+const tooltipId = `nanocat-tooltip-${useId()}`
+const tooltipTrigger = computed<Element | null>(() => {
+  const trigger = triggerRef.value
+  if (!trigger) return null
 
-const showTooltip = () => {
-  visible.value = true
-  nextTick(() => {
-    if (!triggerRef.value) return
-    const rect = triggerRef.value.getBoundingClientRect()
-    const offset = props.offset ?? 8
-    const currentPlacement = tooltipPlacement.value
+  const slottedElement = trigger.childElementCount === 1
+    ? trigger.firstElementChild
+    : null
 
-    if (currentPlacement === 'right') {
-      tooltipStyle.value = {
-        left: `${rect.right + offset}px`,
-        top: `${rect.top + rect.height / 2}px`,
-      }
-      return
-    }
+  return slottedElement ?? trigger
+})
+const floating = useAnchoredOverlay(visible, tooltipTrigger, tooltipRef, {
+  placement: () => tooltipPlacement.value,
+  align: () => 'center',
+  horizontalAlign: () => 'center',
+  gap: () => props.offset ?? 8,
+  fallbackStrategy: 'opposite-if-fit',
+  constrainWidth: false,
+  clampMainAxis: false,
+})
+const resolvedPlacement = computed<TooltipPlacement>(() => floating.position.value.placement)
+const tooltipStyle = computed<CSSProperties>(() => ({
+  ...floating.panelStyle.value,
+  transform: 'none',
+}))
 
-    if (currentPlacement === 'bottom') {
-      tooltipStyle.value = {
-        left: `${rect.left + rect.width / 2}px`,
-        top: `${rect.bottom + offset}px`,
-      }
-      return
-    }
-
-    if (currentPlacement === 'left') {
-      tooltipStyle.value = {
-        left: `${rect.left - offset}px`,
-        top: `${rect.top + rect.height / 2}px`,
-      }
-      return
-    }
-
-    tooltipStyle.value = {
-      left: `${rect.left + rect.width / 2}px`,
-      top: `${rect.top - offset}px`,
-    }
-  })
+const showTooltip = async () => {
+  if (visible.value) return
+  await floating.present()
 }
 
 const hideTooltip = () => {
-  visible.value = false
+  floating.dismiss()
 }
 </script>

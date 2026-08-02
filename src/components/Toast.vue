@@ -1,6 +1,9 @@
 <template>
   <Teleport to="body">
-    <div class="fixed right-4 top-4 z-[200] flex max-w-[min(420px,90vw)] flex-col gap-3">
+    <div
+      class="fixed right-4 top-4 flex max-w-[min(420px,90vw)] flex-col gap-3"
+      :style="{ zIndex: OVERLAY_LAYER.toast }"
+    >
       <TransitionGroup name="toast">
         <div
           v-for="toast in toasts"
@@ -69,6 +72,7 @@
 </template>
 
 <script setup lang="ts">
+import { OVERLAY_LAYER } from '../layers'
 import type { ToastItem } from '../types'
 
 defineProps<{

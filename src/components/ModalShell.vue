@@ -1,83 +1,87 @@
 <template>
   <Teleport to="body">
-    <div
-      v-if="open"
-      class="fixed inset-0 overflow-y-auto overscroll-contain px-3 py-4"
-      :class="overlayClass"
-      :style="overlayStyle"
-      @click.self="handleClose('overlay')"
-    >
+    <Transition :name="motionName" :css="Boolean(motionName)" appear>
       <div
-        class="flex min-h-full"
-        :class="[alignmentClass, placementClass]"
+        v-if="open"
+        class="fixed inset-0 overflow-y-auto overscroll-contain px-3 py-4"
+        :class="overlayClass"
+        :style="overlayStyle"
         @click.self="handleClose('overlay')"
       >
         <div
-          ref="panel"
-          class="ui-modal-panel"
-          :class="[
-            bare ? '' : 'flex max-h-[calc(100dvh-2rem)] flex-col',
-            sizeClass,
-            resolvedRootClass,
-          ]"
-          :style="panelStyle"
-          role="dialog"
-          aria-modal="true"
-          :aria-label="resolvedAriaLabel || undefined"
-          :aria-labelledby="title ? titleId : undefined"
-          :aria-describedby="description ? descriptionId : undefined"
-          tabindex="-1"
-          @keydown="handleKeydown"
+          class="flex min-h-full"
+          :class="[alignmentClass, placementClass]"
+          @click.self="handleClose('overlay')"
         >
-          <template v-if="bare">
-            <slot />
-          </template>
-          <template v-else>
-            <div
-              v-if="$slots.header || title || description || showClose"
-              class="flex items-start justify-between gap-4 border-b border-border px-5 py-3"
-              :class="headerClass"
-            >
-              <slot name="header">
-                <div class="min-w-0">
-                  <h4 v-if="title" :id="titleId" class="ui-section-title">{{ title }}</h4>
-                  <p v-if="description" :id="descriptionId" class="mt-1 text-sm text-muted-foreground">{{ description }}</p>
-                </div>
-              </slot>
-
-              <Button
-                v-if="showClose"
-                size="xs"
-                variant="outline"
-                root-class="min-w-14 justify-center text-muted-foreground"
-                @click="handleClose('button')"
-              >
-                {{ resolvedCloseText }}
-              </Button>
-            </div>
-
-            <div class="min-h-0 overflow-y-auto px-4 py-3" :class="bodyClass">
+          <div
+            ref="panel"
+            class="ui-modal-panel"
+            :class="[
+              bare ? '' : 'flex max-h-[calc(100dvh-2rem)] flex-col',
+              sizeClass,
+              resolvedRootClass,
+            ]"
+            :style="panelStyle"
+            role="dialog"
+            :aria-modal="modal ? 'true' : undefined"
+            :aria-label="resolvedAriaLabel || undefined"
+            :aria-labelledby="title ? titleId : undefined"
+            :aria-describedby="description ? descriptionId : undefined"
+            tabindex="-1"
+            @keydown="handleKeydown"
+          >
+            <template v-if="bare">
               <slot />
-            </div>
+            </template>
+            <template v-else>
+              <div
+                v-if="$slots.header || title || description || showClose"
+                class="flex items-start justify-between gap-4 border-b border-border px-5 py-3"
+                :class="headerClass"
+              >
+                <slot name="header">
+                  <div class="min-w-0">
+                    <h4 v-if="title" :id="titleId" class="ui-section-title">{{ title }}</h4>
+                    <p v-if="description" :id="descriptionId" class="mt-1 text-sm text-muted-foreground">{{ description }}</p>
+                  </div>
+                </slot>
 
-            <div
-              v-if="$slots.footer"
-              class="flex items-center justify-end gap-2 border-t border-border px-5 py-3"
-              :class="footerClass"
-            >
-              <slot name="footer" />
-            </div>
-          </template>
+                <Button
+                  v-if="showClose"
+                  size="xs"
+                  variant="outline"
+                  root-class="min-w-14 justify-center text-muted-foreground"
+                  @click="handleClose('button')"
+                >
+                  {{ resolvedCloseText }}
+                </Button>
+              </div>
+
+              <div class="min-h-0 overflow-y-auto px-4 py-3" :class="bodyClass">
+                <slot />
+              </div>
+
+              <div
+                v-if="$slots.footer"
+                class="flex items-center justify-end gap-2 border-t border-border px-5 py-3"
+                :class="footerClass"
+              >
+                <slot name="footer" />
+              </div>
+            </template>
+          </div>
         </div>
       </div>
-    </div>
+    </Transition>
   </Teleport>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
 import type { CSSProperties } from 'vue'
+import { getTabbableElements } from '../focus'
 import { useNanocatLocale } from '../i18n'
+import { OVERLAY_LAYER } from '../layers'
 import { resolveRootClass } from '../presets'
 import Button from './Button.vue'
 
@@ -148,17 +152,6 @@ function getTopModal() {
   }, null)
 }
 
-const focusableSelector = [
-  'a[href]',
-  'area[href]',
-  'button:not([disabled])',
-  'input:not([disabled]):not([type="hidden"])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
-  '[contenteditable="true"]',
-  '[tabindex]:not([tabindex="-1"])',
-].join(',')
-
 const props = withDefaults(defineProps<{
   open: boolean
   title?: string
@@ -180,6 +173,8 @@ const props = withDefaults(defineProps<{
   zIndex?: number
   align?: 'center' | 'start'
   placement?: 'center' | 'end'
+  motion?: 'none' | 'drawer'
+  modal?: boolean
 }>(), {
   title: '',
   description: '',
@@ -197,9 +192,11 @@ const props = withDefaults(defineProps<{
   ariaLabel: '',
   bare: false,
   maxWidth: '',
-  zIndex: 120,
+  zIndex: OVERLAY_LAYER.modal,
   align: 'center',
   placement: 'center',
+  motion: 'none',
+  modal: true,
 })
 
 const emit = defineEmits<{
@@ -213,6 +210,7 @@ const titleId = `nanocat-modal-title-${useId()}`
 const descriptionId = `nanocat-modal-description-${useId()}`
 const previouslyFocusedElement = ref<HTMLElement | null>(null)
 let modalActive = false
+let openedAsModal = false
 const resolvedRootClass = computed(() => resolveRootClass(props.rootClass, props.panelClass))
 const resolvedCloseText = computed(() => props.closeText || locale.modalCloseText)
 const resolvedAriaLabel = computed(() => props.ariaLabel)
@@ -220,18 +218,10 @@ const canCloseOnEscape = computed(() => props.closeOnEscape ?? props.closeOnOver
 const overlayStyle = computed<CSSProperties>(() => ({ zIndex: props.zIndex }))
 const alignmentClass = computed(() => props.align === 'start' ? 'items-start' : 'items-center')
 const placementClass = computed(() => props.placement === 'end' ? 'justify-end' : 'justify-center')
+const motionName = computed(() => props.motion === 'drawer' ? 'ui-drawer-motion' : '')
 const panelStyle = computed<CSSProperties>(() => (
   props.maxWidth ? { maxWidth: props.maxWidth } : {}
 ))
-
-function getFocusableElements(target = panel.value) {
-  if (!target) return []
-  return Array.from(target.querySelectorAll<HTMLElement>(focusableSelector)).filter((element) => {
-    return element.getClientRects().length > 0
-      && element.getAttribute('aria-hidden') !== 'true'
-      && !element.hasAttribute('inert')
-  })
-}
 
 function focusInitialElement(target = panel.value) {
   if (!target) return
@@ -239,18 +229,23 @@ function focusInitialElement(target = panel.value) {
   const autofocusElement = target.querySelector<HTMLElement>('[data-autofocus], [autofocus]')
   const nextFocusTarget = autofocusElement && autofocusElement.getClientRects().length > 0
     ? autofocusElement
-    : getFocusableElements(target)[0] ?? target
+    : getTabbableElements(target)[0] ?? target
   nextFocusTarget.focus({ preventScroll: true })
 }
 
 async function openModal() {
   if (modalActive || typeof document === 'undefined') return
   modalActive = true
+  openedAsModal = props.modal
+
+  if (!openedAsModal) return
+
   previouslyFocusedElement.value = document.activeElement instanceof HTMLElement
     ? document.activeElement
     : null
   activateModal(owner, () => panel.value, () => props.zIndex)
   lockBodyScroll(owner)
+  document.addEventListener('keydown', handleDocumentKeydown)
 
   await nextTick()
   if (!modalActive || !props.open) return
@@ -260,8 +255,14 @@ async function openModal() {
 async function closeModal({ restoreFocus = true }: { restoreFocus?: boolean } = {}) {
   if (!modalActive) return
   modalActive = false
+  const wasModal = openedAsModal
+  openedAsModal = false
+
+  if (!wasModal) return
+
   deactivateModal(owner)
   unlockBodyScroll(owner)
+  document.removeEventListener('keydown', handleDocumentKeydown)
 
   if (!restoreFocus) return
   const previous = previouslyFocusedElement.value
@@ -283,7 +284,7 @@ async function closeModal({ restoreFocus = true }: { restoreFocus?: boolean } = 
 }
 
 function handleKeydown(event: KeyboardEvent) {
-  if (getTopModal()?.owner !== owner) return
+  if (props.modal && getTopModal()?.owner !== owner) return
 
   if (event.key === 'Escape') {
     if (!canCloseOnEscape.value) return
@@ -293,9 +294,11 @@ function handleKeydown(event: KeyboardEvent) {
     return
   }
 
+  if (!props.modal) return
+
   if (event.key !== 'Tab') return
 
-  const focusableElements = getFocusableElements()
+  const focusableElements = getTabbableElements(panel.value)
   if (!focusableElements.length) {
     event.preventDefault()
     panel.value?.focus({ preventScroll: true })
@@ -315,6 +318,10 @@ function handleKeydown(event: KeyboardEvent) {
   }
 }
 
+function handleDocumentKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && !event.cancelBubble) handleKeydown(event)
+}
+
 function handleClose(source: 'overlay' | 'button' | 'escape') {
   if (source === 'overlay' && !props.closeOnOverlay) {
     return
@@ -330,6 +337,11 @@ watch(() => props.open, (open) => {
   }
 }, { flush: 'post' })
 
+watch(() => props.modal, () => {
+  if (!props.open || !modalActive) return
+  void closeModal({ restoreFocus: false }).then(openModal)
+}, { flush: 'post' })
+
 onMounted(() => {
   if (props.open) void openModal()
 })
@@ -338,3 +350,34 @@ onBeforeUnmount(() => {
   void closeModal()
 })
 </script>
+
+<style>
+.ui-drawer-motion-enter-active,
+.ui-drawer-motion-leave-active {
+  transition: opacity 120ms ease-out;
+}
+
+.ui-drawer-motion-enter-active .ui-modal-panel,
+.ui-drawer-motion-leave-active .ui-modal-panel {
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ui-drawer-motion-enter-from,
+.ui-drawer-motion-leave-to {
+  opacity: 0;
+}
+
+.ui-drawer-motion-enter-from .ui-modal-panel,
+.ui-drawer-motion-leave-to .ui-modal-panel {
+  transform: translateX(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-drawer-motion-enter-active,
+  .ui-drawer-motion-leave-active,
+  .ui-drawer-motion-enter-active .ui-modal-panel,
+  .ui-drawer-motion-leave-active .ui-modal-panel {
+    transition: none;
+  }
+}
+</style>

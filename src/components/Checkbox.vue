@@ -14,7 +14,7 @@
       @change="onChange"
     />
     <span
-      class="flex h-4 w-4 items-center justify-center rounded border border-border bg-background text-transparent transition-colors
+      class="relative flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-background text-transparent transition-colors
              peer-checked:border-primary peer-checked:bg-primary peer-checked:text-primary-foreground
              peer-indeterminate:border-primary peer-indeterminate:bg-primary peer-indeterminate:text-primary-foreground
              peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background
@@ -22,17 +22,17 @@
       aria-hidden="true"
     >
       <svg
-        v-if="modelValue"
         viewBox="0 0 20 20"
-        class="h-3.5 w-3.5"
+        class="absolute h-3.5 w-3.5"
+        :class="modelValue ? 'opacity-100' : 'opacity-0'"
         fill="currentColor"
       >
         <path d="M7.6 13.2 4.4 10l1.2-1.2 2 2 6-6 1.2 1.2-7.2 7.2z" />
       </svg>
       <svg
-        v-else-if="isIndeterminate"
         viewBox="0 0 20 20"
-        class="h-3.5 w-3.5"
+        class="absolute h-3.5 w-3.5"
+        :class="isIndeterminate ? 'opacity-100' : 'opacity-0'"
         fill="none"
         stroke="currentColor"
         stroke-linecap="round"

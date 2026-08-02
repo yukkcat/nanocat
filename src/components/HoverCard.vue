@@ -28,9 +28,9 @@
         v-if="visible"
         :id="cardId"
         ref="cardRef"
-        class="ui-floating-panel fixed z-[9999] !rounded-lg !p-3"
+        class="ui-floating-panel fixed !rounded-lg !p-3"
         :class="cardClass"
-        :style="tooltipStyle"
+        :style="[tooltipStyle, tooltipLayerStyle]"
         @mouseenter="handleTooltipEnter"
         @mouseleave="handleTooltipLeave"
       >
@@ -51,7 +51,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, useId } from 'vue'
+import { useAnchoredOverlay } from '../composables/useAnchoredOverlay'
+import { OVERLAY_LAYER } from '../layers'
 
 const props = withDefaults(
   defineProps<{
@@ -70,10 +72,25 @@ const triggerRef = ref<HTMLElement | null>(null)
 const cardRef = ref<HTMLElement | null>(null)
 const cardId = `nanocat-hover-card-${useId()}`
 const visible = ref(false)
-const placement = ref<'top' | 'bottom'>('top')
-const tooltipStyle = ref<Record<string, string>>({})
-const arrowStyle = ref<Record<string, string>>({ left: '50%' })
+const tooltipLayerStyle = { zIndex: OVERLAY_LAYER.tooltip }
 let hideTimeout: ReturnType<typeof setTimeout> | null = null
+const floating = useAnchoredOverlay(visible, triggerRef, cardRef, {
+  placement: () => 'top',
+  align: () => 'center',
+  gap: () => props.offset,
+  fallbackStrategy: 'opposite-on-overflow',
+  arrowPadding: 12,
+})
+const placement = computed<'top' | 'bottom'>(() => {
+  const resolved = floating.position.value.placement
+  return resolved === 'bottom' ? 'bottom' : 'top'
+})
+const tooltipStyle = floating.panelStyle
+const arrowStyle = computed(() => ({
+  left: floating.position.value.arrowOffset === null
+    ? '50%'
+    : `${floating.position.value.arrowOffset}px`,
+}))
 
 const arrowBorderClass = computed(() =>
   placement.value === 'bottom'
@@ -87,78 +104,18 @@ const arrowFillClass = computed(() =>
     : 'top-full -translate-y-px border-t-[5px] border-t-card'
 )
 
-const updatePosition = () => {
-  if (!triggerRef.value) return
-
-  const rect = triggerRef.value.getBoundingClientRect()
-  const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0
-  const viewportPadding = 8
-  const fallbackWidth = Math.min(320, Math.max(220, viewportWidth - viewportPadding * 2))
-  const cardWidth = cardRef.value?.offsetWidth || fallbackWidth
-  const cardHeight = cardRef.value?.offsetHeight || 0
-  const triggerCenter = rect.left + rect.width / 2
-  const minCenter = viewportPadding + cardWidth / 2
-  const maxCenter = Math.max(minCenter, viewportWidth - viewportPadding - cardWidth / 2)
-  const clampedCenter = Math.min(maxCenter, Math.max(minCenter, triggerCenter))
-  const arrowX = Math.min(Math.max(triggerCenter - (clampedCenter - cardWidth / 2), 12), Math.max(12, cardWidth - 12))
-  const topAnchor = rect.top - props.offset
-  const bottomAnchor = rect.bottom + props.offset
-  const wouldOverflowTop = topAnchor - cardHeight < viewportPadding
-
-  if (wouldOverflowTop) {
-    placement.value = 'bottom'
-    const maxTop = Math.max(viewportPadding, viewportHeight - viewportPadding - cardHeight)
-    tooltipStyle.value = {
-      left: `${clampedCenter}px`,
-      top: `${Math.min(bottomAnchor, maxTop)}px`,
-      transform: 'translate(-50%, 0)',
-      maxWidth: `calc(100vw - ${viewportPadding * 2}px)`,
-    }
-  } else {
-    placement.value = 'top'
-    const minTopAnchor = viewportPadding + cardHeight
-    tooltipStyle.value = {
-      left: `${clampedCenter}px`,
-      top: `${Math.max(topAnchor, minTopAnchor)}px`,
-      transform: 'translate(-50%, -100%)',
-      maxWidth: `calc(100vw - ${viewportPadding * 2}px)`,
-    }
-  }
-
-  arrowStyle.value = { left: `${arrowX}px` }
-}
-
-const handleViewportChange = () => {
-  if (!visible.value) return
-  updatePosition()
-}
-
-const bindViewportListeners = () => {
-  window.addEventListener('resize', handleViewportChange)
-  window.addEventListener('scroll', handleViewportChange, true)
-}
-
-const unbindViewportListeners = () => {
-  window.removeEventListener('resize', handleViewportChange)
-  window.removeEventListener('scroll', handleViewportChange, true)
-}
-
 const showTooltip = () => {
   if (hideTimeout) {
     clearTimeout(hideTimeout)
     hideTimeout = null
   }
-  visible.value = true
-  nextTick(() => {
-    updatePosition()
-    requestAnimationFrame(updatePosition)
-  })
+  void floating.present()
 }
 
 const hideTooltip = () => {
   hideTimeout = setTimeout(() => {
-    visible.value = false
+    hideTimeout = null
+    floating.dismiss()
   }, 150)
 }
 
@@ -167,7 +124,7 @@ const hideImmediately = () => {
     clearTimeout(hideTimeout)
     hideTimeout = null
   }
-  visible.value = false
+  floating.dismiss()
 }
 
 const handleTooltipEnter = () => {
@@ -178,26 +135,18 @@ const handleTooltipEnter = () => {
 }
 
 const handleTooltipLeave = () => {
-  visible.value = false
+  floating.dismiss()
 }
 
 const toggleTooltip = () => {
   if (visible.value) {
-    visible.value = false
+    floating.dismiss()
   } else {
     showTooltip()
   }
 }
 
-watch(visible, (nextVisible) => {
-  if (nextVisible) {
-    bindViewportListeners()
-    return
-  }
-  unbindViewportListeners()
-})
-
 onBeforeUnmount(() => {
-  unbindViewportListeners()
+  if (hideTimeout) clearTimeout(hideTimeout)
 })
 </script>

@@ -37,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import { OVERLAY_LAYER } from '../layers'
 import Button from './Button.vue'
 import ModalShell from './ModalShell.vue'
 
@@ -50,8 +51,9 @@ withDefaults(defineProps<{
   closeOnOverlay?: boolean
   closeOnEscape?: boolean
 }>(), {
-  zIndex: 300,
+  zIndex: OVERLAY_LAYER.confirm,
   closeOnOverlay: true,
+  closeOnEscape: undefined,
 })
 
 defineEmits<{

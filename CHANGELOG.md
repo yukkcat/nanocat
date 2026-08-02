@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.1.8 - 2026-08-02
+
+### Added
+- selected-value alignment for `SelectMenu` and `GroupedSelectMenu`
+- explicit top, right, bottom, and left placement for `Tooltip`
+- reusable responsive `DrawerShell` with a subtle reduced-motion-aware transition
+- centered and start-aligned layout presets for `LoadingState`
+
+### Improved
+- kept active segmented tabs visually stable on hover
+- preserved semantic chip tones over neutral primitive defaults
+- positioned tooltips from the actual slotted trigger and kept them inside the viewport while scrolling or resizing
+- aligned action-menu trigger labels consistently
+- kept teleported select and action menus in trigger-relative Tab order, including inside modals
+- restored the documented ConfirmDialog Escape fallback when `closeOnEscape` is omitted, including when focus falls back to `document.body`
+- preserved the 0.1.7 `TableShell.wrapperClass` root-class fallback while adding `scrollClass` for the scrolling layer
+- expanded `TableShell` with constrained scrolling, sticky headers, a compact non-skeleton loading status, integrated empty states, a fixed footer slot, and unobtrusive narrow-screen scrolling
+- moved drawer placement, viewport sizing, and motion out of individual console pages
+
+### Verified
+- `npm run test:e2e`
+- `npm run check`
+- `npm run build`
+
 ## v0.1.7 - 2026-07-28
 
 ### Added

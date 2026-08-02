@@ -35,7 +35,7 @@
       @click="toggle"
       @keydown="keyboard.handleTriggerKeydown"
     >
-      <span class="min-w-0 flex-1 truncate">{{ label }}</span>
+      <span class="min-w-0 flex-1 truncate text-left">{{ label }}</span>
       <svg
         viewBox="0 0 20 20"
         class="h-4 w-4 shrink-0 transition-transform"
@@ -53,7 +53,7 @@
       v-if="open && !disabled"
       :id="menuId"
       ref="menu"
-      class="ui-floating-panel ui-menu-panel fixed z-[1000] !p-1.5"
+      class="ui-floating-panel ui-menu-panel fixed !p-1.5"
       :class="resolvedContentClass"
       :style="panelStyle"
       role="menu"
@@ -138,7 +138,7 @@
     <div
       v-if="open && submenuOpen && activeChildren.length"
       ref="submenu"
-      class="ui-floating-panel ui-menu-panel fixed z-[1001] !p-1.5"
+      class="ui-floating-panel ui-menu-panel fixed !p-1.5"
       :class="resolvedContentClass"
       :style="submenuStyle"
       role="menu"
@@ -191,6 +191,7 @@ import type { CSSProperties } from 'vue'
 import Button from './Button.vue'
 import { useFloatingPanel } from '../composables/useFloatingPanel'
 import { useMenuKeyboard } from '../composables/useMenuKeyboard'
+import { OVERLAY_LAYER } from '../layers'
 import type { ActionMenuItem, ButtonSize, MenuPlacement } from '../types'
 
 type TriggerVariant = 'button' | 'input'
@@ -265,10 +266,12 @@ const submenuFloating = useFloatingPanel(submenuOpen, activeParentTrigger, subme
 })
 const panelStyle = computed<CSSProperties>(() => ({
   ...floating.panelStyle.value,
+  zIndex: OVERLAY_LAYER.menu,
   minWidth: resolvePanelMinWidth(floating.position.value.triggerWidth),
 }))
 const submenuStyle = computed<CSSProperties>(() => ({
   ...submenuFloating.panelStyle.value,
+  zIndex: OVERLAY_LAYER.submenu,
   minWidth: resolvePanelMinWidth(activeParentTrigger.value?.getBoundingClientRect().width ?? 0),
 }))
 const keyboard = useMenuKeyboard({
@@ -371,7 +374,7 @@ function handleSubmenuKeydown(event: KeyboardEvent) {
     return
   }
   if (event.key === 'Tab') {
-    closeMenu()
+    keyboard.handleMenuKeydown(event)
     return
   }
   submenuKeyboard.handleMenuKeydown(event)

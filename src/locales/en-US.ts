@@ -10,6 +10,7 @@ export const nanocatEnUS: NanocatLocale = {
   statusDetailLabel: 'Description',
   statusDetailRawErrorLabel: 'Raw Error',
   tableShellEmptyTitle: 'No data',
+  tableShellLoadingTitle: 'Loading data',
   viewModeListLabel: 'List view',
   viewModeCardsLabel: 'Card view',
 }

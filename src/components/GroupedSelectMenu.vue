@@ -17,7 +17,7 @@
       @click="toggle"
       @keydown="keyboard.handleTriggerKeydown"
     >
-      <span class="min-w-0 flex-1 truncate">{{ currentLabel }}</span>
+      <span class="min-w-0 flex-1 truncate" :class="valueAlignmentClass">{{ currentLabel }}</span>
       <svg aria-hidden="true" viewBox="0 0 20 20" class="h-4 w-4 shrink-0" fill="currentColor">
         <path d="M5 7l5 6 5-6H5z" />
       </svg>
@@ -29,7 +29,7 @@
       v-if="open"
       :id="menuId"
       ref="menu"
-      class="ui-floating-panel ui-menu-panel grouped-select-menu fixed z-[1000]"
+      class="ui-floating-panel ui-menu-panel grouped-select-menu fixed"
       :style="menuStyle"
       role="listbox"
       :aria-multiselectable="multiple ? 'true' : undefined"
@@ -88,6 +88,7 @@ import type { CSSProperties } from 'vue'
 import { useFloatingPanel } from '../composables/useFloatingPanel'
 import { useMenuKeyboard } from '../composables/useMenuKeyboard'
 import { useNanocatLocale } from '../i18n'
+import { OVERLAY_LAYER } from '../layers'
 import type { GroupedSelectGroup, GroupedSelectOption, MenuPlacement } from '../types'
 
 const props = withDefaults(defineProps<{
@@ -103,6 +104,7 @@ const props = withDefaults(defineProps<{
   selectedIndicator?: 'check' | 'none'
   showGroupLabels?: boolean
   groupLabelAlign?: 'left' | 'center' | 'right'
+  valueAlign?: 'left' | 'center' | 'right'
   placement?: MenuPlacement
   block?: boolean
 }>(), {
@@ -117,6 +119,7 @@ const props = withDefaults(defineProps<{
   selectedIndicator: 'check',
   showGroupLabels: true,
   groupLabelAlign: 'left',
+  valueAlign: 'left',
   placement: 'auto',
   block: false,
 })
@@ -140,6 +143,11 @@ const resolvedGroups = computed<GroupedSelectGroup[]>(() => {
 const flatOptions = computed(() => resolvedGroups.value.flatMap((group) => group.options))
 const resolvedPlaceholder = computed(() => props.placeholder || locale.selectMenuPlaceholder)
 const resolvedSelectedCountText = computed(() => props.selectedCountText || locale.selectMenuSelectedCountText)
+const valueAlignmentClass = computed(() => {
+  if (props.valueAlign === 'center') return 'text-center'
+  if (props.valueAlign === 'right') return 'text-right'
+  return 'text-left'
+})
 
 const currentLabel = computed(() => {
   if (props.multiple) {
@@ -164,6 +172,7 @@ const floating = useFloatingPanel(open, trigger, menu, {
 })
 const menuStyle = computed<CSSProperties>(() => ({
   ...floating.panelStyle.value,
+  zIndex: OVERLAY_LAYER.menu,
   minWidth: `${Math.min(floating.position.value.triggerWidth, floating.position.value.maxWidth ?? floating.position.value.triggerWidth)}px`,
 }))
 const keyboard = useMenuKeyboard({

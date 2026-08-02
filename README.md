@@ -137,6 +137,7 @@ const options = [
 - ResultState
 - EmptyState
 - CalloutBox
+- LoadingState
 - Toast
 - HelpTip
 - Tooltip
@@ -151,6 +152,7 @@ const options = [
 - ValueSurface
 - CodeBlock
 - ModalShell
+- DrawerShell
 - ConfirmDialog
 - HoverCard
 

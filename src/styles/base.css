@@ -95,8 +95,12 @@
 }
 
 .ui-btn {
-  @apply inline-flex items-center justify-center rounded-full border border-border text-foreground transition-colors duration-150 ease-out;
+  @apply inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-border text-foreground leading-none transition-colors duration-150 ease-out;
   @apply disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.ui-btn > svg {
+  @apply shrink-0;
 }
 
 .ui-btn-sm {
@@ -320,7 +324,7 @@
 }
 
 .ui-tooltip {
-  @apply fixed z-[9999] rounded-md bg-foreground px-2 py-1 text-[10px] text-background shadow-[var(--shadow-floating)];
+  @apply fixed rounded-md bg-foreground px-2 py-1 text-[10px] text-background shadow-[var(--shadow-floating)];
 }
 
 .ui-tooltip--top {

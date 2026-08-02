@@ -8,6 +8,7 @@ export { default as ChartCard } from './components/ChartCard.vue'
 export { default as Checkbox } from './components/Checkbox.vue'
 export { default as CodeBlock } from './components/CodeBlock.vue'
 export { default as ConfirmDialog } from './components/ConfirmDialog.vue'
+export { default as DrawerShell } from './components/DrawerShell.vue'
 export { default as CalloutBox } from './components/CalloutBox.vue'
 export { default as EmptyState } from './components/EmptyState.vue'
 export { default as FieldGrid } from './components/FieldGrid.vue'
@@ -29,6 +30,7 @@ export { default as StatusDetailPill } from './components/StatusDetailPill.vue'
 export { default as StatCard } from './components/StatCard.vue'
 export { default as StatusPill } from './components/StatusPill.vue'
 export { default as TableShell } from './components/TableShell.vue'
+export { default as LoadingState } from './components/LoadingState.vue'
 export { default as Toast } from './components/Toast.vue'
 export { default as ToolbarShell } from './components/ToolbarShell.vue'
 export { default as Tooltip } from './components/Tooltip.vue'
@@ -43,7 +45,10 @@ export {
   useNanocatLocale,
 } from './i18n'
 
+export { OVERLAY_LAYER } from './layers'
+
 export type { NanocatLocale } from './i18n'
+export type { OverlayLayerName, OverlayLayerValue } from './layers'
 export type {
   ActionMenuItem,
   ButtonSize,

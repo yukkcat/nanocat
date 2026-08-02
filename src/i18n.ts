@@ -12,6 +12,7 @@ export type NanocatLocale = {
   statusDetailLabel: string
   statusDetailRawErrorLabel: string
   tableShellEmptyTitle: string
+  tableShellLoadingTitle?: string
   viewModeListLabel: string
   viewModeCardsLabel: string
 }

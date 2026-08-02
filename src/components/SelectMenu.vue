@@ -14,7 +14,7 @@
       @click="toggle"
       @keydown="keyboard.handleTriggerKeydown"
     >
-      <span class="min-w-0 flex-1 truncate">{{ currentLabel }}</span>
+      <span class="min-w-0 flex-1 truncate" :class="valueAlignmentClass">{{ currentLabel }}</span>
       <svg aria-hidden="true" viewBox="0 0 20 20" class="h-4 w-4 shrink-0" fill="currentColor">
         <path d="M5 7l5 6 5-6H5z" />
       </svg>
@@ -26,7 +26,7 @@
       v-if="open"
       :id="menuId"
       ref="menu"
-      class="ui-floating-panel ui-menu-panel fixed z-[1000] space-y-1"
+      class="ui-floating-panel ui-menu-panel fixed space-y-1"
       :style="menuStyle"
       role="listbox"
       :aria-multiselectable="multiple ? 'true' : undefined"
@@ -75,6 +75,7 @@ import type { CSSProperties } from 'vue'
 import { useFloatingPanel } from '../composables/useFloatingPanel'
 import { useMenuKeyboard } from '../composables/useMenuKeyboard'
 import { useNanocatLocale } from '../i18n'
+import { OVERLAY_LAYER } from '../layers'
 import type { MenuPlacement, SelectOption } from '../types'
 
 const props = withDefaults(defineProps<{
@@ -90,6 +91,7 @@ const props = withDefaults(defineProps<{
   selectedIndicator?: 'check' | 'text' | 'none'
   disabled?: boolean
   ariaLabel?: string
+  valueAlign?: 'left' | 'center' | 'right'
   maxVisibleLabels?: number
   selectedIndicatorText?: string
   selectedCountText?: string
@@ -103,6 +105,7 @@ const props = withDefaults(defineProps<{
   selectedIndicator: undefined,
   disabled: false,
   ariaLabel: '',
+  valueAlign: 'left',
   maxVisibleLabels: 3,
   selectedIndicatorText: '',
   selectedCountText: '',
@@ -141,6 +144,11 @@ const visibleLabelLimit = computed(() => props.maxVisibleLabels ?? 3)
 const selectedIndicatorText = computed(() => props.selectedIndicatorText || locale.selectMenuSelectedIndicatorText)
 const selectedCountText = computed(() => props.selectedCountText || locale.selectMenuSelectedCountText)
 const defaultPlaceholder = computed(() => locale.selectMenuPlaceholder)
+const valueAlignmentClass = computed(() => {
+  if (props.valueAlign === 'center') return 'text-center'
+  if (props.valueAlign === 'right') return 'text-right'
+  return 'text-left'
+})
 
 const currentLabel = computed(() => {
   if (props.multiple) {
@@ -166,6 +174,7 @@ const floating = useFloatingPanel(open, trigger, menu, {
 })
 const menuStyle = computed<CSSProperties>(() => ({
   ...floating.panelStyle.value,
+  zIndex: OVERLAY_LAYER.menu,
   ...(usesTriggerWidth.value
     ? { minWidth: `${Math.min(floating.position.value.triggerWidth, floating.position.value.maxWidth ?? floating.position.value.triggerWidth)}px` }
     : { width: `${Math.min(floating.position.value.triggerWidth, floating.position.value.maxWidth ?? floating.position.value.triggerWidth)}px` }),

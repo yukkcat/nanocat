@@ -1,5 +1,6 @@
 import { nextTick } from 'vue'
 import type { Ref } from 'vue'
+import { getTabbableElements } from '../focus'
 
 type MenuKeyboardOptions = {
   open: Ref<boolean>
@@ -53,6 +54,39 @@ export function useMenuKeyboard(options: MenuKeyboardOptions) {
     restoreTriggerFocus()
   }
 
+  function resolveAdjacentTriggerTarget(backward: boolean) {
+    const trigger = options.trigger.value
+    if (!trigger || typeof document === 'undefined') return null
+
+    const modal = trigger.closest<HTMLElement>('[role="dialog"][aria-modal="true"]')
+    const scope: ParentNode = modal ?? document
+    const candidates = getTabbableElements(scope, {
+      exclude: (element) => Boolean(element.closest('[role="menu"], [role="listbox"]')),
+    })
+    const triggerIndex = candidates.indexOf(trigger)
+    if (triggerIndex < 0 || !candidates.length) return null
+
+    const offset = backward ? -1 : 1
+    let targetIndex = triggerIndex + offset
+    if (modal) {
+      targetIndex = (targetIndex + candidates.length) % candidates.length
+    } else if (targetIndex < 0 || targetIndex >= candidates.length) {
+      return null
+    }
+    return candidates[targetIndex] ?? null
+  }
+
+  function closeAndContinueTab(event: KeyboardEvent) {
+    const target = resolveAdjacentTriggerTarget(event.shiftKey)
+    options.closeMenu()
+    if (!target) return
+
+    event.preventDefault()
+    void nextTick(() => {
+      if (target.isConnected) target.focus({ preventScroll: true })
+    })
+  }
+
   async function handleTriggerKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape' && options.open.value) {
       event.preventDefault()
@@ -90,7 +124,7 @@ export function useMenuKeyboard(options: MenuKeyboardOptions) {
       event.preventDefault()
       closeAndRestoreFocus()
     } else if (event.key === 'Tab') {
-      options.closeMenu()
+      closeAndContinueTab(event)
     }
   }
 
