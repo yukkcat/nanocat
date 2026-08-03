@@ -57,6 +57,13 @@
       <button data-testid="action-after" type="button">After action menu</button>
     </section>
 
+    <HoverCard focusable>
+      <span>Credential status</span>
+      <template #content>
+        <span>Credential details</span>
+      </template>
+    </HoverCard>
+
     <button data-testid="open-menu-modal" type="button" @click="menuModalOpen = true">
       Open menu modal
     </button>
@@ -154,6 +161,7 @@ import ActionMenu from '../../src/components/ActionMenu.vue'
 import ConfirmDialog from '../../src/components/ConfirmDialog.vue'
 import DrawerShell from '../../src/components/DrawerShell.vue'
 import GroupedSelectMenu from '../../src/components/GroupedSelectMenu.vue'
+import HoverCard from '../../src/components/HoverCard.vue'
 import LoadingState from '../../src/components/LoadingState.vue'
 import ModalShell from '../../src/components/ModalShell.vue'
 import SelectMenu from '../../src/components/SelectMenu.vue'

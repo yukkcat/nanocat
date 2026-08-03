@@ -26,7 +26,7 @@
       v-if="open"
       :id="menuId"
       ref="menu"
-      class="ui-floating-panel ui-menu-panel fixed space-y-1"
+      class="ui-floating-panel ui-menu-panel fixed"
       :style="menuStyle"
       role="listbox"
       :aria-multiselectable="multiple ? 'true' : undefined"

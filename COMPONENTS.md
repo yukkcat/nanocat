@@ -345,7 +345,7 @@ Each section focuses on:
 - Group labels render as a small caption with a horizontal divider line.
 - `showGroupLabels` can hide captions; `groupLabelAlign` controls whether captions sit left, centered, or right. `valueAlign` controls the selected value in the trigger without changing menu-item alignment.
 - Supports multi-select without checkbox boxes; selected items use a compact check indicator.
-- Menu density follows `SelectMenu`: shared floating-panel padding/radius, 4px item gap, rounded-md item hover/selected state. Arrow keys, Home/End, Escape, click-outside, and viewport changes are handled by the shared floating-panel runtime.
+- Menu density follows `SelectMenu`: 8px floating-panel padding, 4px item gap, and pill-shaped item hover/selected states. Arrow keys, Home/End, Escape, click-outside, and viewport changes are handled by the shared floating-panel runtime.
 - Supports the same keyboard navigation and viewport-safe positioning as `SelectMenu`.
 
 ---

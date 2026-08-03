@@ -60,7 +60,7 @@
       @keydown="handleMainMenuKeydown"
     >
       <template v-for="item in items" :key="item.key">
-        <div v-if="item.dividerBefore" class="my-1 border-t border-border" role="separator" />
+        <div v-if="item.dividerBefore" class="ui-menu-divider" role="separator" />
         <div v-if="item.heading" class="ui-menu-heading">
           {{ item.label }}
         </div>
@@ -145,7 +145,7 @@
       @keydown="handleSubmenuKeydown"
     >
       <template v-for="item in activeChildren" :key="item.key">
-        <div v-if="item.dividerBefore" class="my-1 border-t border-border" role="separator" />
+        <div v-if="item.dividerBefore" class="ui-menu-divider" role="separator" />
         <div v-if="item.heading" class="ui-menu-heading">
           {{ item.label }}
         </div>

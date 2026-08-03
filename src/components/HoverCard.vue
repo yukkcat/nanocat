@@ -28,7 +28,7 @@
         v-if="visible"
         :id="cardId"
         ref="cardRef"
-        class="ui-floating-panel fixed"
+        class="ui-floating-panel fixed !rounded-lg !p-3"
         :class="cardClass"
         :style="[tooltipStyle, tooltipLayerStyle]"
         @mouseenter="handleTooltipEnter"

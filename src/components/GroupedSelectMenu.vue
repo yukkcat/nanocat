@@ -275,10 +275,6 @@ onBeforeUnmount(() => {
   gap: 4px;
 }
 
-.grouped-select-section + .grouped-select-section {
-  margin-top: 6px;
-}
-
 .grouped-select-heading {
   display: flex;
   align-items: center;

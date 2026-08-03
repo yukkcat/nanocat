@@ -87,6 +87,43 @@ test('ActionMenu Tab order continues from its trigger', async ({ page }) => {
   await expect(page.getByRole('menu')).toBeHidden()
 })
 
+test('floating menus and hover cards cast the shared floating shadow', async ({ page }) => {
+  await page.goto('/')
+
+  await page.getByRole('button', { name: 'Choose action' }).click()
+  await expect(page.getByRole('menu')).not.toHaveCSS('box-shadow', 'none')
+
+  await page.getByText('Credential status').click()
+  const hoverCard = page.locator('.ui-floating-panel').filter({ hasText: 'Credential details' })
+  await expect(hoverCard).not.toHaveCSS('box-shadow', 'none')
+})
+
+test('floating menus use consistent spacing and pill items without changing hover card geometry', async ({ page }) => {
+  await page.goto('/')
+
+  await page.getByRole('button', { name: 'Choose action' }).click()
+  await expect(page.getByRole('menu')).toHaveCSS('padding-left', '8px')
+  await expect(page.getByRole('menu')).toHaveCSS('border-radius', '16px')
+  await expect(page.getByRole('menu')).toHaveCSS('row-gap', '4px')
+  await expect(page.getByRole('menuitem', { name: 'Edit' })).toHaveCSS('border-radius', '9999px')
+
+  await page.keyboard.press('Escape')
+  await page.getByRole('button', { name: 'Choose select' }).click()
+  await expect(page.getByRole('listbox')).toHaveCSS('row-gap', '4px')
+  await expect(page.getByRole('option', { name: 'Alpha' })).toHaveCSS('border-radius', '9999px')
+
+  await page.keyboard.press('Escape')
+  await page.getByRole('button', { name: 'Choose grouped select' }).click()
+  await expect(page.getByRole('listbox')).toHaveCSS('row-gap', '4px')
+  await expect(page.getByRole('option', { name: 'One' })).toHaveCSS('border-radius', '9999px')
+
+  await page.getByText('Credential status').click()
+  const hoverCard = page.locator('.ui-floating-panel').filter({ hasText: 'Credential details' })
+  await expect(hoverCard).toHaveCSS('padding-left', '12px')
+  await expect(hoverCard).toHaveCSS('padding-right', '12px')
+  await expect(hoverCard).toHaveCSS('border-radius', '16px')
+})
+
 test('ActionMenu submenu Tab order still continues from the top-level trigger', async ({ page }) => {
   await page.goto('/')
   const trigger = page.getByRole('button', { name: 'Choose action' })

@@ -7,6 +7,7 @@
 
 ### Improved
 - changed the built-in `ModalShell` close action to the same accessible icon control used by custom headers
+- unified floating-menu padding and item spacing, with pill-shaped hover and selected states
 
 ## v0.1.8 - 2026-08-02
 
