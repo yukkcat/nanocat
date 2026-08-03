@@ -68,6 +68,13 @@
     --shadow-toast: 0 12px 30px rgba(15, 23, 42, 0.08), 0 3px 10px rgba(15, 23, 42, 0.05);
     --overlay-backdrop: rgba(0, 0, 0, 0.4);
 
+    /* Shared overlay geometry. Keep menus, submenus and hover cards on the
+       same visual rhythm; consumers can still override these tokens per
+       theme without adding component-specific classes. */
+    --overlay-radius: 0.75rem;
+    --overlay-padding: 0.375rem;
+    --overlay-item-radius: 0.5rem;
+
     --toast-success-border: hsl(var(--tone-success-border) / 0.7);
     --toast-success-bg-top: hsl(var(--tone-success-bg) / 0.92);
     --toast-success-bg-bottom: hsl(var(--card) / 0.985);
@@ -308,11 +315,15 @@
 }
 
 .ui-floating-panel {
-  @apply rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-floating)];
+  @apply border border-border bg-card shadow-[var(--shadow-floating)];
+  border-radius: var(--overlay-radius);
+  padding: var(--overlay-padding);
 }
 
 .ui-menu-panel {
-  @apply overflow-x-hidden overflow-y-auto overscroll-contain rounded-lg;
+  @apply overflow-x-hidden overflow-y-auto overscroll-contain;
+  border-radius: var(--overlay-radius);
+  padding: var(--overlay-padding);
 }
 
 .ui-overlay-backdrop {
@@ -381,9 +392,10 @@
 }
 
 .ui-menu-item {
-  @apply flex h-8 min-w-0 w-full items-center justify-between gap-2 overflow-hidden rounded-md px-3 text-left text-xs transition-colors;
+  @apply flex h-8 min-w-0 w-full items-center justify-between gap-2 overflow-hidden px-3 text-left text-xs transition-colors;
   @apply hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card;
   @apply disabled:cursor-not-allowed disabled:opacity-50;
+  border-radius: var(--overlay-item-radius);
 }
 
 .ui-menu-item-danger {

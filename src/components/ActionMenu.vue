@@ -53,7 +53,7 @@
       v-if="open && !disabled"
       :id="menuId"
       ref="menu"
-      class="ui-floating-panel ui-menu-panel fixed !p-1.5"
+      class="ui-floating-panel ui-menu-panel fixed"
       :class="resolvedContentClass"
       :style="panelStyle"
       role="menu"
@@ -138,7 +138,7 @@
     <div
       v-if="open && submenuOpen && activeChildren.length"
       ref="submenu"
-      class="ui-floating-panel ui-menu-panel fixed !p-1.5"
+      class="ui-floating-panel ui-menu-panel fixed"
       :class="resolvedContentClass"
       :style="submenuStyle"
       role="menu"
