@@ -750,6 +750,7 @@ Each section focuses on:
 - `loading?: boolean`
 - `loadingColspan?: number` (defaults to `emptyColspan`)
 - `loadingTitle?: string`
+- `loadingDescription?: string`
 - `showEmpty?: boolean`
 - `emptyColspan?: number`
 - `emptyTitle?: string`
@@ -757,6 +758,7 @@ Each section focuses on:
 - `variant?: "soft" | "outline"`
 - `size?: "sm" | "md"`
 - `fill?: boolean`
+- `hoverRows?: boolean`
 - `stickyHeader?: boolean`
 - `footerBorder?: boolean`
 - `unframed?: boolean`
@@ -782,12 +784,14 @@ Each section focuses on:
 ### Notes
 - Scroll-safe table wrapper with built-in loading and empty states. Loading takes precedence over the empty state and uses a compact status spinner instead of skeleton rows.
 - `fill` makes the shell consume the available height of a constrained flex parent and moves horizontal and vertical scrolling into the table body region.
+- `hoverRows` adds the shared data-row hover treatment. Rows marked with `aria-selected="true"` keep their selected surface instead of being covered by hover.
 - `stickyHeader` keeps the table header visible inside the scroll region. It is normally paired with `fill`.
 - On narrow Chromium/WebKit viewports, the table keeps its horizontal scrollbar and hides the redundant inner vertical thumb.
 - `wrapperClass` remains the 0.1.7 compatibility alias for `rootClass`; when both are set, `rootClass` wins. Use `scrollClass` for scrolling-layer customizations.
 - The `footer` remains outside the scroll region; `footerBorder` adds its top divider.
 - The default empty state is visually integrated into the table without adding a nested surface.
-- Loading and empty content follow the width of the table's scroll container and wrap long text, including when the table itself has a larger minimum width.
+- Loading and empty content follow the width of the table's scroll container and wrap long text, including when the table itself has a larger minimum width. In a constrained `fill` layout, the state is centered in the available table region.
+- In `fill` layouts, horizontal overscroll stays inside the table, while vertical wheel scrolling returns to the page at an empty state or a scroll boundary.
 - `loadingTitle` and `emptyTitle` fall back to the global locale (`setNanocatLocale`).
 
 ---

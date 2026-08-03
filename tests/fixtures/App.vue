@@ -113,11 +113,19 @@
       data-testid="table-shell-modern"
       root-class="new-root-marker"
       scroll-class="new-scroll-marker"
+      hover-rows
     >
       <template #head>
         <tr><th>Column</th></tr>
       </template>
-      <tr><td>Value</td></tr>
+      <tr data-testid="table-shell-hover-row"><td>Value</td></tr>
+      <tr
+        data-testid="table-shell-selected-row"
+        aria-selected="true"
+        style="background: rgb(240, 240, 240)"
+      >
+        <td>Selected value</td>
+      </tr>
       <template #footer>
         <span>Table footer</span>
       </template>
@@ -131,7 +139,23 @@
     <TableShell
       data-testid="table-shell-loading"
       loading
+      loading-description="Reading the latest table rows."
       :empty-colspan="3"
+      style="height: 12rem"
+      fill
+    >
+      <template #head>
+        <tr><th>One</th><th>Two</th><th>Three</th></tr>
+      </template>
+    </TableShell>
+    <TableShell
+      data-testid="table-shell-empty"
+      show-empty
+      empty-title="No table rows"
+      empty-description="The page should keep scrolling over this state."
+      :empty-colspan="3"
+      style="height: 12rem"
+      fill
     >
       <template #head>
         <tr><th>One</th><th>Two</th><th>Three</th></tr>

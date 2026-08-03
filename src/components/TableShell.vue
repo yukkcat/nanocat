@@ -6,6 +6,8 @@
       resolvedRootClass,
       {
         'table-shell--fill': fill,
+        'table-shell--hover-rows': hoverRows,
+        'table-shell--state': loading || showEmpty,
         'table-shell--sticky-header': stickyHeader,
         'table-shell--unframed': unframed,
       },
@@ -28,16 +30,20 @@
           <slot name="head" />
         </thead>
         <tbody class="text-sm text-foreground" :class="bodyClass">
-          <tr v-if="loading">
+          <tr v-if="loading" class="table-shell__state-row">
             <td :colspan="resolvedLoadingColspan" :class="variantClasses.empty">
               <div class="table-shell__state">
                 <slot name="loading">
-                  <LoadingState compact :title="resolvedLoadingTitle" />
+                  <LoadingState
+                    compact
+                    :title="resolvedLoadingTitle"
+                    :description="loadingDescription"
+                  />
                 </slot>
               </div>
             </td>
           </tr>
-          <tr v-else-if="showEmpty">
+          <tr v-else-if="showEmpty" class="table-shell__state-row">
             <td :colspan="emptyColspan" :class="variantClasses.empty">
               <div class="table-shell__state">
                 <slot name="empty">
@@ -81,6 +87,7 @@ const props = withDefaults(defineProps<{
   loading?: boolean
   loadingColspan?: number
   loadingTitle?: string
+  loadingDescription?: string
   showEmpty?: boolean
   emptyColspan?: number
   emptyTitle?: string
@@ -88,6 +95,7 @@ const props = withDefaults(defineProps<{
   variant?: UiSurfaceVariant
   size?: UiSize
   fill?: boolean
+  hoverRows?: boolean
   stickyHeader?: boolean
   footerBorder?: boolean
   unframed?: boolean
@@ -102,6 +110,7 @@ const props = withDefaults(defineProps<{
   loading: false,
   loadingColspan: undefined,
   loadingTitle: '',
+  loadingDescription: '',
   showEmpty: false,
   emptyColspan: 1,
   emptyTitle: '',
@@ -109,6 +118,7 @@ const props = withDefaults(defineProps<{
   variant: 'soft',
   size: 'sm',
   fill: false,
+  hoverRows: false,
   stickyHeader: false,
   footerBorder: false,
   unframed: false,
@@ -165,7 +175,25 @@ const resolvedLoadingColspan = computed(() => props.loadingColspan ?? props.empt
   flex: 1 1 auto;
   overflow: auto;
   overflow-anchor: none;
-  overscroll-behavior: contain;
+  overscroll-behavior-x: contain;
+}
+
+.table-shell--fill.table-shell--state .table-shell__scroll,
+.table-shell--fill.table-shell--state table {
+  height: 100%;
+}
+
+.table-shell--fill.table-shell--state tbody,
+.table-shell--fill.table-shell--state tbody > tr,
+.table-shell--fill.table-shell--state tbody > tr > td {
+  height: 100%;
+}
+
+.table-shell--fill.table-shell--state .table-shell__state {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .table-shell--sticky-header .table-shell__head {
@@ -174,6 +202,14 @@ const resolvedLoadingColspan = computed(() => props.loadingColspan ?? props.empt
   z-index: 2;
   background: hsl(var(--card));
   box-shadow: inset 0 -1px hsl(var(--border) / 0.8);
+}
+
+.table-shell--hover-rows :deep(tbody > tr:not([aria-selected='true']):not(.table-shell__state-row) > td) {
+  transition: background-color 160ms ease;
+}
+
+.table-shell--hover-rows :deep(tbody > tr:not([aria-selected='true']):not(.table-shell__state-row):hover > td) {
+  background: var(--table-shell-row-hover-background, hsl(var(--muted) / 0.28));
 }
 
 .table-shell__footer {

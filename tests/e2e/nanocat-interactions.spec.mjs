@@ -175,13 +175,53 @@ test('TableShell keeps legacy wrapperClass as a root-class fallback', async ({ p
   await expect(footer.evaluate(node => node.parentElement?.classList.contains('table-shell'))).resolves.toBe(true)
 })
 
+test('TableShell can hover data rows without covering selected rows', async ({ page }) => {
+  await page.goto('/')
+
+  const hoverRow = page.getByTestId('table-shell-hover-row')
+  const hoverCell = hoverRow.locator('td')
+  const hoverBefore = await hoverCell.evaluate((cell) => getComputedStyle(cell).backgroundColor)
+  await hoverRow.hover()
+  const hoverAfter = await hoverCell.evaluate((cell) => getComputedStyle(cell).backgroundColor)
+  expect(hoverAfter).not.toBe(hoverBefore)
+
+  const selectedRow = page.getByTestId('table-shell-selected-row')
+  const selectedCell = selectedRow.locator('td')
+  const selectedBefore = await selectedCell.evaluate((cell) => getComputedStyle(cell).backgroundColor)
+  await selectedRow.hover()
+  const selectedAfter = await selectedCell.evaluate((cell) => getComputedStyle(cell).backgroundColor)
+  expect(selectedAfter).toBe(selectedBefore)
+})
+
 test('TableShell loading state uses a concise status instead of skeleton bars', async ({ page }) => {
   await page.goto('/')
 
   const table = page.getByTestId('table-shell-loading')
   await expect(table.locator('table')).toHaveAttribute('aria-busy', 'true')
   await expect(table.getByRole('status')).toContainText('Loading data')
+  await expect(table.getByRole('status')).toContainText('Reading the latest table rows.')
+  const stateLayout = await table.evaluate((root) => ({
+    rootHeight: root.clientHeight,
+    tableHeight: root.querySelector('table')?.getBoundingClientRect().height || 0,
+  }))
+  expect(Math.abs(stateLayout.rootHeight - stateLayout.tableHeight)).toBeLessThanOrEqual(2)
   await expect(table.locator('.nanocat-skeleton')).toHaveCount(0)
+})
+
+test('TableShell empty fill state returns vertical wheel scrolling to the page', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 })
+  await page.goto('/')
+
+  const table = page.getByTestId('table-shell-empty')
+  await table.scrollIntoViewIfNeeded()
+  await table.hover()
+  const scroll = table.locator('.table-shell__scroll')
+  await expect(scroll).toHaveCSS('overflow-y', 'auto')
+  await expect(scroll).toHaveCSS('overscroll-behavior-y', 'auto')
+
+  const before = await page.evaluate(() => window.scrollY)
+  await page.mouse.wheel(0, 320)
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(before)
 })
 
 test('LoadingState exposes one stable status without skeleton bars', async ({ page }) => {
