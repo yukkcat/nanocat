@@ -478,6 +478,27 @@ Each section focuses on:
 
 ---
 
+## CloseButton
+
+### Props
+- `label?: string` (accessible name and tooltip)
+- `disabled?: boolean`
+- `tone?: "default" | "dark"`
+- `size?: "sm" | "md"`
+- `rootClass?: string`
+
+### Emits
+- `click`
+
+### Slots
+- none
+
+### Notes
+- Shared close control for dialogs, drawers, previews, and compact panels.
+- `ModalShell` uses the same Module for its built-in close action.
+
+---
+
 ## DrawerShell
 
 ### Props

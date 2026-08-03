@@ -122,6 +122,7 @@ const options = [
 ### Form / select
 - Input
 - Checkbox
+- CloseButton
 - Skeleton
 - SelectMenu
 - FilterSelect

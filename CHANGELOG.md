@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- shared `CloseButton` for modal, drawer, preview, and compact panel headers
+
+### Improved
+- changed the built-in `ModalShell` close action to the same accessible icon control used by custom headers
+
 ## v0.1.8 - 2026-08-02
 
 ### Added

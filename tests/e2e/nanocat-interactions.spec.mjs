@@ -184,6 +184,21 @@ test('DrawerShell opens as a full-height right-side dialog and closes with Escap
   await expect(drawer).toBeHidden()
 })
 
+test('ModalShell and DrawerShell use the shared accessible close control', async ({ page }) => {
+  await page.goto('/')
+  await page.getByTestId('open-drawer').click()
+
+  const drawer = page.getByRole('dialog', { name: 'Activity drawer' })
+  const closeButton = drawer.getByRole('button', { name: 'Close' })
+  await expect(closeButton).toBeVisible()
+  await expect(closeButton).toHaveClass(/ui-close-button/)
+  await expect(closeButton).toHaveCSS('width', '32px')
+  await expect(closeButton).toHaveCSS('height', '32px')
+
+  await closeButton.click()
+  await expect(drawer).toBeHidden()
+})
+
 test('DrawerShell uses one subtle panel transition when it opens', async ({ page }) => {
   await page.goto('/')
   const animationCount = await page.evaluate(async () => {

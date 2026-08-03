@@ -46,15 +46,11 @@
                   </div>
                 </slot>
 
-                <Button
+                <CloseButton
                   v-if="showClose"
-                  size="xs"
-                  variant="outline"
-                  root-class="min-w-14 justify-center text-muted-foreground"
+                  :label="resolvedCloseText"
                   @click="handleClose('button')"
-                >
-                  {{ resolvedCloseText }}
-                </Button>
+                />
               </div>
 
               <div class="min-h-0 overflow-y-auto px-4 py-3" :class="bodyClass">
@@ -83,7 +79,7 @@ import { getTabbableElements } from '../focus'
 import { useNanocatLocale } from '../i18n'
 import { OVERLAY_LAYER } from '../layers'
 import { resolveRootClass } from '../presets'
-import Button from './Button.vue'
+import CloseButton from './CloseButton.vue'
 
 type ScrollState = {
   overflow: string
