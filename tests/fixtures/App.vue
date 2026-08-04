@@ -109,6 +109,17 @@
       <p>Detached drawer content</p>
     </DrawerShell>
 
+    <SideDock
+      :open="sideDockOpen"
+      aria-label="Open minimized task"
+      width="11rem"
+      @click="sideDockClickCount += 1"
+    >
+      <strong>Task progress</strong>
+      <span>3 of 5 complete</span>
+    </SideDock>
+    <output data-testid="side-dock-click-count">{{ sideDockClickCount }}</output>
+
     <TableShell
       data-testid="table-shell-modern"
       root-class="new-root-marker"
@@ -189,6 +200,7 @@ import HoverCard from '../../src/components/HoverCard.vue'
 import LoadingState from '../../src/components/LoadingState.vue'
 import ModalShell from '../../src/components/ModalShell.vue'
 import SelectMenu from '../../src/components/SelectMenu.vue'
+import SideDock from '../../src/components/SideDock.vue'
 import TableShell from '../../src/components/TableShell.vue'
 
 const confirmOpen = ref(false)
@@ -224,6 +236,8 @@ const modalSelectValue = ref('alpha')
 const drawerOpen = ref(false)
 const detachedDrawerOpen = ref(false)
 const backgroundActionCount = ref(0)
+const sideDockOpen = ref(true)
+const sideDockClickCount = ref(0)
 
 function handleConfirmCancel() {
   confirmOpen.value = false

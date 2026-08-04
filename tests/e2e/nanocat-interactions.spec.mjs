@@ -311,6 +311,28 @@ test('DrawerShell without a backdrop stays non-modal and casts a detached shadow
   await expect(page.getByTestId('background-action-count')).toHaveText('1')
 })
 
+test('SideDock teleports an accessible interactive entry to the responsive right edge', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 })
+  await page.goto('/')
+
+  const dock = page.getByRole('button', { name: 'Open minimized task' })
+  await expect(dock).toBeVisible()
+  await expect(dock).toHaveCSS('position', 'fixed')
+  await expect(dock).not.toHaveCSS('box-shadow', 'none')
+  const desktopBounds = await dock.boundingBox()
+  expect(desktopBounds).not.toBeNull()
+  expect(1280 - (desktopBounds.x + desktopBounds.width)).toBeLessThanOrEqual(1)
+
+  await dock.click()
+  await expect(page.getByTestId('side-dock-click-count')).toHaveText('1')
+
+  await page.setViewportSize({ width: 390, height: 844 })
+  const mobileBounds = await dock.boundingBox()
+  expect(mobileBounds).not.toBeNull()
+  expect(844 - (mobileBounds.y + mobileBounds.height)).toBeGreaterThanOrEqual(15)
+  expect(844 - (mobileBounds.y + mobileBounds.height)).toBeLessThanOrEqual(17)
+})
+
 test('TableShell keeps both scroll axes inside the body and its footer outside', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/')

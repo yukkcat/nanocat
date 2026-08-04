@@ -482,6 +482,7 @@ Each section focuses on:
 
 ### Props
 - `label?: string` (accessible name and tooltip)
+- `icon?: string` (default: `"lucide:x"`)
 - `disabled?: boolean`
 - `tone?: "default" | "dark"`
 - `size?: "sm" | "md"`
@@ -496,6 +497,28 @@ Each section focuses on:
 ### Notes
 - Shared close control for dialogs, drawers, previews, and compact panels.
 - `ModalShell` uses the same Module for its built-in close action.
+
+---
+
+## SideDock
+
+### Props
+- `open: boolean`
+- `ariaLabel: string`
+- `ariaDescribedby?: string`
+- `zIndex?: number`
+- `width?: string` (default: `"11rem"`)
+- `rootClass?: string`
+
+### Emits
+- `click`
+
+### Slots
+- `default`
+
+### Notes
+- Teleported, non-modal entry docked to the right viewport edge for reopening minimized panels.
+- Owns edge positioning, responsive mobile placement, focus treatment, shadow, and enter/leave motion; callers own all business content.
 
 ---
 

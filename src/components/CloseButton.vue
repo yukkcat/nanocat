@@ -13,7 +13,7 @@
     :title="label"
     @click="emit('click', $event)"
   >
-    <Icon icon="lucide:x" :class="size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'" />
+    <Icon :icon="icon" :class="size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'" />
   </button>
 </template>
 
@@ -24,12 +24,14 @@ defineOptions({ inheritAttrs: false })
 
 withDefaults(defineProps<{
   label?: string
+  icon?: string
   disabled?: boolean
   tone?: 'default' | 'dark'
   size?: 'sm' | 'md'
   rootClass?: string
 }>(), {
   label: 'Close',
+  icon: 'lucide:x',
   disabled: false,
   tone: 'default',
   size: 'md',
