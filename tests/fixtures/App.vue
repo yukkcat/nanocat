@@ -129,7 +129,12 @@
       <template #head>
         <tr><th>Column</th></tr>
       </template>
-      <tr data-testid="table-shell-hover-row"><td>Value</td></tr>
+      <tr
+        data-testid="table-shell-hover-row"
+        style="background: rgb(255, 240, 240)"
+      >
+        <td>Value</td>
+      </tr>
       <tr
         data-testid="table-shell-selected-row"
         aria-selected="true"
@@ -175,7 +180,7 @@
     <TableShell
       data-testid="table-shell-scroll-layout"
       style="width: 18rem; height: 12rem"
-      fill
+      scroll-mode="contained"
       sticky-header
       table-class="scroll-layout-wide"
     >
@@ -187,12 +192,48 @@
         <span data-testid="table-shell-scroll-footer">Pagination</span>
       </template>
     </TableShell>
+    <TableShell
+      data-testid="table-shell-page-layout"
+      style="width: 18rem"
+      fill
+      scroll-mode="page"
+      table-class="scroll-layout-wide"
+    >
+      <tr v-for="row in 3" :key="row"><td>Page row {{ row }}</td></tr>
+    </TableShell>
+    <section
+      data-testid="checkbox-scroll-outer"
+      style="height: 12rem; overflow: hidden"
+    >
+      <TableShell
+        data-testid="checkbox-scroll-table"
+        style="height: 12rem"
+        scroll-mode="contained"
+      >
+        <template #head>
+          <tr><th>Select</th><th>Row</th></tr>
+        </template>
+        <tr v-for="row in 40" :key="row">
+          <td>
+            <Checkbox
+              :data-testid="`checkbox-scroll-row-${row}`"
+              :model-value="checkedRow === row"
+              :aria-label="`Select row ${row}`"
+              @update:model-value="checkedRow = $event ? row : 0"
+            />
+          </td>
+          <td>Checkbox row {{ row }}</td>
+        </tr>
+      </TableShell>
+      <div aria-hidden="true" style="height: 80rem"></div>
+    </section>
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import ActionMenu from '../../src/components/ActionMenu.vue'
+import Checkbox from '../../src/components/Checkbox.vue'
 import ConfirmDialog from '../../src/components/ConfirmDialog.vue'
 import DrawerShell from '../../src/components/DrawerShell.vue'
 import GroupedSelectMenu from '../../src/components/GroupedSelectMenu.vue'
@@ -238,6 +279,7 @@ const detachedDrawerOpen = ref(false)
 const backgroundActionCount = ref(0)
 const sideDockOpen = ref(true)
 const sideDockClickCount = ref(0)
+const checkedRow = ref(0)
 
 function handleConfirmCancel() {
   confirmOpen.value = false

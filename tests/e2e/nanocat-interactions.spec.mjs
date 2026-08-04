@@ -175,15 +175,21 @@ test('TableShell keeps legacy wrapperClass as a root-class fallback', async ({ p
   await expect(footer.evaluate(node => node.parentElement?.classList.contains('table-shell'))).resolves.toBe(true)
 })
 
-test('TableShell can hover data rows without covering selected rows', async ({ page }) => {
+test('TableShell can hover data rows without covering status or selected backgrounds', async ({ page }) => {
   await page.goto('/')
 
   const hoverRow = page.getByTestId('table-shell-hover-row')
   const hoverCell = hoverRow.locator('td')
-  const hoverBefore = await hoverCell.evaluate((cell) => getComputedStyle(cell).backgroundColor)
+  const hoverBefore = await hoverRow.evaluate((row) => getComputedStyle(row).backgroundColor)
+  const hoverCellBefore = await hoverCell.evaluate((cell) => getComputedStyle(cell).backgroundColor)
+  const hoverShadowBefore = await hoverCell.evaluate((cell) => getComputedStyle(cell).boxShadow)
   await hoverRow.hover()
-  const hoverAfter = await hoverCell.evaluate((cell) => getComputedStyle(cell).backgroundColor)
-  expect(hoverAfter).not.toBe(hoverBefore)
+  const hoverAfter = await hoverRow.evaluate((row) => getComputedStyle(row).backgroundColor)
+  const hoverCellAfter = await hoverCell.evaluate((cell) => getComputedStyle(cell).backgroundColor)
+  const hoverShadowAfter = await hoverCell.evaluate((cell) => getComputedStyle(cell).boxShadow)
+  expect(hoverAfter).toBe(hoverBefore)
+  expect(hoverCellAfter).not.toBe(hoverCellBefore)
+  expect(hoverShadowAfter).toBe(hoverShadowBefore)
 
   const selectedRow = page.getByTestId('table-shell-selected-row')
   const selectedCell = selectedRow.locator('td')
@@ -360,4 +366,44 @@ test('TableShell keeps both scroll axes inside the body and its footer outside',
   expect(layout.gutter).toBe('auto')
   expect(layout.verticalScrollbarWidth).toBe('0px')
   expect(layout.horizontalScrollbarHeight).toBe('8px')
+})
+
+test('TableShell scroll mode can override the legacy fill flag', async ({ page }) => {
+  await page.goto('/')
+
+  const contained = page.getByTestId('table-shell-scroll-layout')
+  const pageLayout = page.getByTestId('table-shell-page-layout')
+  await expect(contained).toHaveClass(/table-shell--fill/)
+  await expect(pageLayout).not.toHaveClass(/table-shell--fill/)
+  await expect(pageLayout.locator('.table-shell__scroll')).toHaveCSS('max-height', 'none')
+})
+
+test('Checkbox selection inside a scrolled table does not move an outer workspace', async ({ page }) => {
+  await page.goto('/')
+
+  const outer = page.getByTestId('checkbox-scroll-outer')
+  const scroll = page.getByTestId('checkbox-scroll-table').locator('.table-shell__scroll')
+  const checkbox = page.getByTestId('checkbox-scroll-row-40')
+  await scroll.evaluate(node => { node.scrollTop = node.scrollHeight })
+  const tableScrollTop = await scroll.evaluate(node => node.scrollTop)
+  const controlGeometry = await checkbox.evaluate((label) => {
+    const input = label.querySelector('input')
+    const labelRect = label.getBoundingClientRect()
+    const inputRect = input?.getBoundingClientRect()
+    return {
+      labelTop: labelRect.top,
+      labelBottom: labelRect.bottom,
+      inputTop: inputRect?.top ?? Number.NaN,
+      inputBottom: inputRect?.bottom ?? Number.NaN,
+    }
+  })
+
+  expect(controlGeometry.inputTop).toBeGreaterThanOrEqual(controlGeometry.labelTop)
+  expect(controlGeometry.inputBottom).toBeLessThanOrEqual(controlGeometry.labelBottom)
+
+  await checkbox.click()
+
+  await expect(checkbox.getByRole('checkbox')).toBeChecked()
+  expect(await scroll.evaluate(node => node.scrollTop)).toBe(tableScrollTop)
+  expect(await outer.evaluate(node => node.scrollTop)).toBe(0)
 })

@@ -781,6 +781,7 @@ Each section focuses on:
 - `variant?: "soft" | "outline"`
 - `size?: "sm" | "md"`
 - `fill?: boolean`
+- `scrollMode?: "auto" | "contained" | "page"` (default: `"auto"`)
 - `hoverRows?: boolean`
 - `stickyHeader?: boolean`
 - `footerBorder?: boolean`
@@ -807,6 +808,7 @@ Each section focuses on:
 ### Notes
 - Scroll-safe table wrapper with built-in loading and empty states. Loading takes precedence over the empty state and uses a compact status spinner instead of skeleton rows.
 - `fill` makes the shell consume the available height of a constrained flex parent and moves horizontal and vertical scrolling into the table body region.
+- `scrollMode="contained"` selects that constrained scrolling layout explicitly. `scrollMode="page"` lets table rows expand with the page and overrides the legacy `fill` flag; `auto` preserves the existing `fill` behavior.
 - `hoverRows` adds the shared data-row hover treatment. Rows marked with `aria-selected="true"` keep their selected surface instead of being covered by hover.
 - `stickyHeader` keeps the table header visible inside the scroll region. It is normally paired with `fill`.
 - On narrow Chromium/WebKit viewports, the table keeps its horizontal scrollbar and hides the redundant inner vertical thumb.

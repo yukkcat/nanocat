@@ -5,7 +5,7 @@
       unframed ? '' : variantClasses.wrapper,
       resolvedRootClass,
       {
-        'table-shell--fill': fill,
+        'table-shell--fill': resolvedFill,
         'table-shell--hover-rows': hoverRows,
         'table-shell--state': loading || showEmpty,
         'table-shell--sticky-header': stickyHeader,
@@ -95,6 +95,7 @@ const props = withDefaults(defineProps<{
   variant?: UiSurfaceVariant
   size?: UiSize
   fill?: boolean
+  scrollMode?: 'auto' | 'contained' | 'page'
   hoverRows?: boolean
   stickyHeader?: boolean
   footerBorder?: boolean
@@ -118,6 +119,7 @@ const props = withDefaults(defineProps<{
   variant: 'soft',
   size: 'sm',
   fill: false,
+  scrollMode: 'auto',
   hoverRows: false,
   stickyHeader: false,
   footerBorder: false,
@@ -134,6 +136,10 @@ const props = withDefaults(defineProps<{
 const locale = useNanocatLocale()
 const variantClasses = computed(() => getTableShellVariantClasses(props.variant || 'soft'))
 const resolvedRootClass = computed(() => resolveRootClass(props.rootClass, props.wrapperClass))
+const resolvedFill = computed(() => (
+  props.scrollMode === 'contained'
+  || (props.scrollMode === 'auto' && props.fill)
+))
 const resolvedEmptyTitle = computed(() => props.emptyTitle || locale.tableShellEmptyTitle)
 const resolvedLoadingTitle = computed(() => props.loadingTitle || locale.tableShellLoadingTitle || 'Loading data')
 const resolvedLoadingColspan = computed(() => props.loadingColspan ?? props.emptyColspan)
@@ -209,7 +215,10 @@ const resolvedLoadingColspan = computed(() => props.loadingColspan ?? props.empt
 }
 
 .table-shell--hover-rows :deep(tbody > tr:not([aria-selected='true']):not(.table-shell__state-row):hover > td) {
-  background: var(--table-shell-row-hover-background, hsl(var(--muted) / 0.28));
+  background-color: var(
+    --table-shell-row-hover-background,
+    hsl(var(--muted-foreground) / 0.08)
+  );
 }
 
 .table-shell__footer {

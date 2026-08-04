@@ -1,6 +1,6 @@
 <template>
   <label
-    class="inline-flex items-center gap-2"
+    class="relative inline-flex items-center gap-2"
     :class="disabled ? 'cursor-not-allowed' : 'cursor-pointer'"
   >
     <input
