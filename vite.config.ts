@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/bundle.ts'),
+      entry: path.resolve(import.meta.dirname, 'src/bundle.ts'),
       formats: ['es'],
       fileName: 'index',
       cssFileName: 'styles',
