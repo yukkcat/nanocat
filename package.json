@@ -53,7 +53,7 @@
     "tailwindcss": "^3.4.19",
     "typescript": "~5.9.3",
     "vite": "^8.2.0",
-    "vue": "^3.5.26",
+    "vue": "^3.5.41",
     "vue-tsc": "^2.2.12"
   },
   "license": "MIT",
