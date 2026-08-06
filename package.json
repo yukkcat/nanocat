@@ -59,7 +59,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yukkcat/nanocat.git"
+    "url": "https://github.com/yukkcat/nanocat-ui.git"
   },
   "description": "Reusable Vue 3 UI components, styles and Tailwind preset for Nanocat.",
   "keywords": [
@@ -69,9 +69,9 @@
     "tailwind",
     "nanocat"
   ],
-  "homepage": "https://github.com/yukkcat/nanocat",
+  "homepage": "https://github.com/yukkcat/nanocat-ui",
   "bugs": {
-    "url": "https://github.com/yukkcat/nanocat/issues"
+    "url": "https://github.com/yukkcat/nanocat-ui/issues"
   },
   "publishConfig": {
     "access": "public"
