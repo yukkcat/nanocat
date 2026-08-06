@@ -113,6 +113,7 @@
       :open="sideDockOpen"
       aria-label="Open minimized task"
       width="11rem"
+      draggable
       @click="sideDockClickCount += 1"
     >
       <strong>Task progress</strong>

@@ -332,6 +332,21 @@ test('SideDock teleports an accessible interactive entry to the responsive right
   await dock.click()
   await expect(page.getByTestId('side-dock-click-count')).toHaveText('1')
 
+  const dragStart = await dock.boundingBox()
+  expect(dragStart).not.toBeNull()
+  await page.mouse.move(dragStart.x + dragStart.width / 2, dragStart.y + dragStart.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(dragStart.x + dragStart.width / 2, dragStart.y + dragStart.height / 2 + 120)
+  await page.mouse.up()
+  const draggedBounds = await dock.boundingBox()
+  expect(draggedBounds).not.toBeNull()
+  expect(draggedBounds.y).toBeGreaterThan(dragStart.y + 100)
+  expect(1280 - (draggedBounds.x + draggedBounds.width)).toBeLessThanOrEqual(1)
+  await expect(page.getByTestId('side-dock-click-count')).toHaveText('1')
+
+  await dock.click()
+  await expect(page.getByTestId('side-dock-click-count')).toHaveText('2')
+
   await page.setViewportSize({ width: 390, height: 844 })
   const mobileBounds = await dock.boundingBox()
   expect(mobileBounds).not.toBeNull()

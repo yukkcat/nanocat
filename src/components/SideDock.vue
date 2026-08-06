@@ -3,12 +3,24 @@
     <Transition name="ui-side-dock" appear>
       <button
         v-if="open"
+        ref="dockRef"
         type="button"
-        :class="['ui-side-dock', rootClass]"
-        :style="{ zIndex, '--ui-side-dock-width': width }"
+        :class="[
+          'ui-side-dock',
+          {
+            'ui-side-dock--draggable': draggable,
+            'ui-side-dock--dragging': dragging,
+          },
+          rootClass,
+        ]"
+        :style="dockStyle"
         :aria-label="ariaLabel"
         :aria-describedby="ariaDescribedby || undefined"
-        @click="emit('click', $event)"
+        @click="handleClick"
+        @pointerdown="handlePointerDown"
+        @pointermove="handlePointerMove"
+        @pointerup="handlePointerEnd"
+        @pointercancel="handlePointerEnd"
       >
         <slot />
       </button>
@@ -17,25 +29,116 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { OVERLAY_LAYER } from '../layers'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   open: boolean
   ariaLabel: string
   ariaDescribedby?: string
   zIndex?: number
   width?: string
   rootClass?: string
+  draggable?: boolean
 }>(), {
   ariaDescribedby: '',
   zIndex: () => OVERLAY_LAYER.confirm - 1,
   width: '11rem',
   rootClass: '',
+  draggable: false,
 })
 
 const emit = defineEmits<{
   click: [event: MouseEvent]
 }>()
+
+const EDGE_GAP = 8
+const DRAG_THRESHOLD = 4
+const dockRef = ref<HTMLButtonElement | null>(null)
+const draggedTop = ref<number | null>(null)
+const dragging = ref(false)
+let activePointerId: number | null = null
+let pointerStartY = 0
+let dockStartTop = 0
+let suppressClick = false
+
+const dockStyle = computed(() => ({
+  zIndex: props.zIndex,
+  '--ui-side-dock-width': props.width,
+  ...(draggedTop.value === null
+    ? {}
+    : { top: `${draggedTop.value}px`, bottom: 'auto' }),
+}))
+
+function isDesktop() {
+  return window.innerWidth > 640
+}
+
+function clampTop(value: number, height: number) {
+  return Math.min(
+    Math.max(EDGE_GAP, value),
+    Math.max(EDGE_GAP, window.innerHeight - height - EDGE_GAP),
+  )
+}
+
+function handlePointerDown(event: PointerEvent) {
+  if (!props.draggable || !isDesktop() || (event.pointerType === 'mouse' && event.button !== 0)) return
+  const dock = dockRef.value
+  if (!dock) return
+  const bounds = dock.getBoundingClientRect()
+  activePointerId = event.pointerId
+  pointerStartY = event.clientY
+  dockStartTop = bounds.top
+  dragging.value = false
+  dock.setPointerCapture(event.pointerId)
+}
+
+function handlePointerMove(event: PointerEvent) {
+  if (activePointerId !== event.pointerId) return
+  const dock = dockRef.value
+  if (!dock) return
+  const delta = event.clientY - pointerStartY
+  if (!dragging.value && Math.abs(delta) < DRAG_THRESHOLD) return
+  dragging.value = true
+  event.preventDefault()
+  draggedTop.value = clampTop(dockStartTop + delta, dock.getBoundingClientRect().height)
+}
+
+function handlePointerEnd(event: PointerEvent) {
+  if (activePointerId !== event.pointerId) return
+  const dock = dockRef.value
+  if (dock?.hasPointerCapture(event.pointerId)) dock.releasePointerCapture(event.pointerId)
+  if (dragging.value) {
+    suppressClick = true
+    window.setTimeout(() => { suppressClick = false }, 0)
+  }
+  activePointerId = null
+  dragging.value = false
+}
+
+function handleClick(event: MouseEvent) {
+  if (suppressClick) {
+    event.preventDefault()
+    event.stopPropagation()
+    suppressClick = false
+    return
+  }
+  emit('click', event)
+}
+
+function handleResize() {
+  if (!isDesktop()) {
+    draggedTop.value = null
+    return
+  }
+  const dock = dockRef.value
+  if (dock && draggedTop.value !== null) {
+    draggedTop.value = clampTop(draggedTop.value, dock.getBoundingClientRect().height)
+  }
+}
+
+onMounted(() => window.addEventListener('resize', handleResize))
+onBeforeUnmount(() => window.removeEventListener('resize', handleResize))
 </script>
 
 <style scoped>
@@ -63,6 +166,16 @@ const emit = defineEmits<{
   background: hsl(var(--accent));
 }
 
+.ui-side-dock--draggable {
+  cursor: grab;
+  touch-action: none;
+}
+
+.ui-side-dock--dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
 .ui-side-dock:focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
@@ -83,6 +196,11 @@ const emit = defineEmits<{
   .ui-side-dock {
     top: auto;
     bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  .ui-side-dock--draggable {
+    cursor: pointer;
+    touch-action: auto;
   }
 }
 

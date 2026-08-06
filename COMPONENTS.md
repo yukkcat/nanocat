@@ -509,6 +509,7 @@ Each section focuses on:
 - `zIndex?: number`
 - `width?: string` (default: `"11rem"`)
 - `rootClass?: string`
+- `draggable?: boolean` (default: `false`; enables viewport-bounded vertical dragging on desktop)
 
 ### Emits
 - `click`
@@ -519,6 +520,7 @@ Each section focuses on:
 ### Notes
 - Teleported, non-modal entry docked to the right viewport edge for reopening minimized panels.
 - Owns edge positioning, responsive mobile placement, focus treatment, shadow, and enter/leave motion; callers own all business content.
+- Dragging is vertical only, remains inside the desktop viewport, and does not emit the following click; mobile placement stays fixed.
 
 ---
 
