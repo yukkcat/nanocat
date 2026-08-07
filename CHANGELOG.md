@@ -2,22 +2,27 @@
 
 ## Unreleased
 
+## v0.1.9 - 2026-08-07
+
 ### Added
-- shared `CloseButton` for modal, drawer, preview, and compact panel headers
+- allowed users to drag `SideDock` vertically while it remains anchored to the viewport edge
 
 ### Improved
-- changed the built-in `ModalShell` close action to the same accessible icon control used by custom headers
-- unified floating-menu padding and item spacing, with pill-shaped hover and selected states
+- upgraded the development toolchain to Vue 3.5.41 and Vite 8
+- updated package repository metadata for `nanocat-ui`
 
 ## v0.1.8 - 2026-08-02
 
 ### Added
+- shared `CloseButton` for modal, drawer, preview, and compact panel headers
 - selected-value alignment for `SelectMenu` and `GroupedSelectMenu`
 - explicit top, right, bottom, and left placement for `Tooltip`
 - reusable responsive `DrawerShell` with a subtle reduced-motion-aware transition
 - centered and start-aligned layout presets for `LoadingState`
 
 ### Improved
+- changed the built-in `ModalShell` close action to the same accessible icon control used by custom headers
+- unified floating-menu padding and item spacing, with pill-shaped hover and selected states
 - kept active segmented tabs visually stable on hover
 - preserved semantic chip tones over neutral primitive defaults
 - positioned tooltips from the actual slotted trigger and kept them inside the viewport while scrolling or resizing
